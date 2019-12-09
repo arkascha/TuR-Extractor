@@ -1,4 +1,4 @@
-package org.rustygnome.rut;
+package org.rustygnome.tur;
 
 import org.apache.commons.codec.DecoderException;
 

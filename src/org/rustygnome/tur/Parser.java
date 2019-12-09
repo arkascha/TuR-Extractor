@@ -1,4 +1,4 @@
-package org.rustygnome.rut;
+package org.rustygnome.tur;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

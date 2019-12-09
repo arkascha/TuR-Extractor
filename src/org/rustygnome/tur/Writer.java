@@ -1,4 +1,4 @@
-package org.rustygnome.rut;
+package org.rustygnome.tur;
 
 import com.sun.istack.internal.NotNull;
 import org.apache.poi.ss.usermodel.Cell;
@@ -13,7 +13,7 @@ import java.util.Iterator;
 
 public class Writer {
 
-    static final String DOCUMENT_FILE_PATH = "/home/arkascha/Projects/RuT-Extractor/work/artefacts/contact_form.xlsx";
+    static final String DOCUMENT_FILE_PATH = "/home/arkascha/Projects/TuR-Extractor/work/artefacts/contact_form.xlsx";
     static final String DOCUMENT_SHEET_NAME = "Kontaktformular";
 
     private String filePath;

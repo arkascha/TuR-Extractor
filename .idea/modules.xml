@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/RuT-Extractor.iml" filepath="$PROJECT_DIR$/RuT-Extractor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TuR-Extractor.iml" filepath="$PROJECT_DIR$/TuR-Extractor.iml" />
     </modules>
   </component>
 </project>
