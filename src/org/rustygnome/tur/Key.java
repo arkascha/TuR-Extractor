@@ -1,10 +1,8 @@
 package org.rustygnome.tur;
 
-import com.sun.istack.internal.NotNull;
-
 public enum Key {
     NAME("Name"),
-    EMAIL_ADDRESS("E-Mail"),
+    EMAIL("E-Mail"),
     INTERESTS("Interessen"),
     DATETIME("Zeitpunkt");
 
@@ -16,14 +14,5 @@ public enum Key {
 
     public String toString() {
         return name;
-    }
-
-    static public Key byString(@NotNull String name) {
-        for (Key key : values()) {
-            if (key.toString().equals(name)) {
-                return key;
-            }
-        }
-        return null;
     }
 }

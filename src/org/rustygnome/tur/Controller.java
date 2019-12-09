@@ -15,7 +15,7 @@ public class Controller {
     private Reader reader;
 
     static public Controller getInstance() throws IllegalAccessException, InstantiationException {
-        return Factory.getInstance(Controller.class).create();
+        return Factory.getInstance(Controller.class).createArtefact();
     }
 
     public Controller() throws IllegalAccessException, InstantiationException {

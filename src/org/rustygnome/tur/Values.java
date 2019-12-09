@@ -12,7 +12,7 @@ public class Values {
 
     private final Map<Key, String> values = new TreeMap<Key, String>() {{
         put(Key.NAME, null);
-        put(Key.EMAIL_ADDRESS, null);
+        put(Key.EMAIL, null);
         put(Key.INTERESTS, null);
         put(Key.DATETIME, null);
     }};
@@ -22,28 +22,13 @@ public class Values {
         Iterator<Values.Entry> iterator = titles.entrySet().iterator();
         while (iterator.hasNext()) {
             Values.Entry entry = iterator.next();
-            entry.setValue(entry.getKey().toString());
+            titles.put(entry.getKey(), entry.getKey().toString());
         }
         return titles;
     }
 
-    public void put(@NotNull String name, @NotNull String value) {
-        Key key = Key.byString(name);
-        if (key != null) {
-            put(key, value);
-        }
-    }
-
     public void put(@NotNull Key key, @NotNull String value) {
         values.put(key, value);
-    }
-
-    public String get(@NotNull String name) {
-        Key key = Key.byString(name);
-        if (key != null) {
-            return get(key);
-        }
-        return null;
     }
 
     public String get(@NotNull Key key) {

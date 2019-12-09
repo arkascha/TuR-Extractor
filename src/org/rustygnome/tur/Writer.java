@@ -20,7 +20,7 @@ public class Writer {
     private String sheetName;
 
     static public Writer getInstance() throws InstantiationException, IllegalAccessException {
-        return Factory.getInstance(Writer.class).create();
+        return Factory.getInstance(Writer.class).createArtefact();
     }
 
     public Writer() {

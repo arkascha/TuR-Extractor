@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 public class Reader {
 
     static public Reader getInstance() throws InstantiationException, IllegalAccessException {
-        return Factory.getInstance(Reader.class).create();
+        return Factory.getInstance(Reader.class).createArtefact();
     }
 
     public String readInput() throws IOException, DecoderException {

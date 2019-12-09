@@ -21,11 +21,15 @@ public class Factory<T> {
         instances.put(type, mock);
     }
 
+    static public <T> void clearInstances() {
+        instances = new HashMap<>();
+    }
+
     public Factory(@NotNull Class<T> type) {
         this.type = type;
     }
 
-    public T create() throws IllegalAccessException, InstantiationException {
+    public T createArtefact() throws IllegalAccessException, InstantiationException {
         return type.newInstance();
     }
 }
