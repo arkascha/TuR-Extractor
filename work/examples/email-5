@@ -1,0 +1,72 @@
+Content-Type: message/rfc822;
+ name="=?UTF-8?Q?Nachricht=5f=c3=bcber=5fhttps=5fwww=2esenioren-tat-rat=2ed?=
+ =?UTF-8?Q?e=5fgeistiges-soziales=5fgemeinsamaktiv=5f=2eeml?="
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename*0*=UTF-8''%4E%61%63%68%72%69%63%68%74%5F%C3%BC%62%65%72%5F%68%74;
+ filename*1*=%74%70%73%5F%77%77%77%2E%73%65%6E%69%6F%72%65%6E%2D%74%61%74;
+ filename*2*=%2D%72%61%74%2E%64%65%5F%67%65%69%73%74%69%67%65%73%2D%73%6F;
+ filename*3*=%7A%69%61%6C%65%73%5F%67%65%6D%65%69%6E%73%61%6D%61%6B%74%69;
+ filename*4*=%76%5F%2E%65%6D%6C
+
+Return-Path: <bounce-md_30027860.5ddbdbf2.v1-2f3e05a7e4074fa190e9ccc78758fc57@mail.jimdo-mail.com>
+Received: from mailin83.aul.t-online.de ([172.20.26.83])
+	by ehead21a07.aul.t-online.de (Dovecot) with LMTP id jhn2IPvb212sPQAA2oIxRw;
+	Mon, 25 Nov 2019 14:49:47 +0100
+Received: from mail133-132.atl131.mandrillapp.com ([198.2.133.132]) by mailin83.aul.t-online.de
+	with (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384 encrypted)
+	esmtp id 1iZEkF-1DaWWm0; Mon, 25 Nov 2019 14:49:39 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=mandrill; d=jimdo.de;
+ h=From:Subject:Reply-To:To:Message-Id:Date:MIME-Version:Content-Type:Content-Transfer-Encoding; i=no-reply@jimdo.de;
+ bh=aP+Sha1u2m1Wj0nSsu8MkVfTQpTF5Od2xU4Cyk6nmKI=;
+ b=KHCsu0mbc8MsrEg+TkiKLDmCDcektMbpyovXgp0VlypX3EpJqc5WbnvuJrvtDZZdAYybLDJXFzVz
+   TVfdOEijUBZSEB7bCvbYLBFqWXaa67jVLD+SRdGAmH8z/9XU3Szr+SCMoxYeZP9mX9JFuyc9ul6g
+   SyGlktHnX7W8ejfvRE8=
+Received: from pmta02.mandrill.prod.atl01.rsglab.com (127.0.0.1) by mail133-132.atl131.mandrillapp.com id hrfdv61sar8l for <seniorenbuero-bonn@t-online.de>; Mon, 25 Nov 2019 13:49:37 +0000 (envelope-from <bounce-md_30027860.5ddbdbf2.v1-2f3e05a7e4074fa190e9ccc78758fc57@mail.jimdo-mail.com>)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mandrillapp.com; 
+ i=@mandrillapp.com; q=dns/txt; s=mandrill; t=1574689778; h=From : 
+ Subject : Reply-To : To : Message-Id : Date : MIME-Version : 
+ Content-Type : Content-Transfer-Encoding : From : Subject : Date : 
+ X-Mandrill-User : List-Unsubscribe; 
+ bh=aP+Sha1u2m1Wj0nSsu8MkVfTQpTF5Od2xU4Cyk6nmKI=; 
+ b=P92q5Vngg0do3tYI6yvql2bkzDUfFyRpHEbOxxGDpabaP6IhwPjGygD/ZKoDwW5+HsUOTd
+ TECmuMuQ0doQNe+FDyuasUZ6BeMv419Fm9yik5t0PNo+2Henek3/q6egc95iGdZDa/Flrz2d
+ I8fZ82xx9R6fYZvVzq/EJqTZ2K2hg=
+From: Jimdo <no-reply@jimdo.de>
+Subject: =?utf-8?Q?Nachricht=20=C3=BCber=20https://www.senioren-tat-rat.de/geistiges-soziales/gemeinsamaktiv/?=
+Received: from [54.76.235.101] by mandrillapp.com id 2f3e05a7e4074fa190e9ccc78758fc57; Mon, 25 Nov 2019 13:49:38 +0000
+Reply-To: e.reich-schwarte@gmx.net
+To: seniorenbuero-bonn@t-online.de
+X-Report-Abuse: Please forward a copy of this message, including all headers, to abuse@mandrill.com
+X-Report-Abuse: You can also report abuse here: http://mandrillapp.com/contact/abuse?id=30027860.2f3e05a7e4074fa190e9ccc78758fc57
+X-Mandrill-User: md_30027860
+Message-Id: <30027860.20191125134938.5ddbdbf23a6ab4.30200798@mail133-132.atl131.mandrillapp.com>
+Date: Mon, 25 Nov 2019 13:49:38 +0000
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-TOI-SPAM: n;1;2019-11-25T13:49:47Z
+X-TOI-VIRUSSCAN: clean
+X-TOI-EXPURGATEID: 149288::1574689779-0000108F-3F862433/0/0
+X-TOI-SPAMCLASS: CLEAN, NORMAL
+X-TOI-MSGID: d0fccb37-ef05-4696-98df-fe224d8b6b6f
+X-ENVELOPE-TO: <seniorenbuero-bonn@t-online.de>
+
+Hallo, du hast eine Nachricht =C3=BCber deine Jimdo-Seite https://www.senio=
+ren-tat-rat.de/geistiges-soziales/gemeinsamaktiv/ erhalten:
+
+=2D------------------------------------
+
+ Name, Vorname: Arm-Schorf, Helena
+
+E-Mail: h.arm-schorf@gmx.net
+
+Meine Hauptinteressen sind ....: Spazierg=C3=A4nge, Kinobesuche, Weiteres -=
+ siehe meinen Eintrag im folgenden Kasten
+
+: Cafebesuche, Walking,Cofo St=C3=A4dtetouren,
+
+Nutzer hat die Datenschutzerkl=C3=A4rung akzeptiert. Datum/Uhrzeit: 2019-11=
+=2D25 14:49:37 CET
+
+
