@@ -7,6 +7,7 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Iterator;
@@ -31,22 +32,33 @@ public class Writer {
     public boolean write(@NotNull Values values) throws IOException {
         XSSFWorkbook document = openDocument();
         XSSFSheet sheet = document.getSheet(sheetName);
-
         boolean written = createRow(sheet, values);
         writeDocument(document, filePath);
         return written;
     }
 
-    private XSSFWorkbook openDocument() {
-        boolean freshDocument = !(new File(filePath)).exists();
+    private XSSFWorkbook openDocument()
+            throws IOException {
+        XSSFWorkbook document;
 
-        XSSFWorkbook document = new XSSFWorkbook();
-        if (freshDocument || document.getSheet(sheetName) == null) {
-            XSSFSheet sheet = document.createSheet(sheetName);
-            createRow(sheet, Values.getTitles());
+        if ((new File(filePath)).exists()) {
+            FileInputStream file = new FileInputStream(new File(filePath));
+            document = new XSSFWorkbook(file);
+            if (document.getSheet(sheetName) == null) {
+                createSheet(document, sheetName);
+            }
+            file.close();
+        } else {
+            document = new XSSFWorkbook();
+            createSheet(document, sheetName);
         }
 
         return document;
+    }
+
+    private void createSheet(XSSFWorkbook document, String sheetName) {
+        XSSFSheet sheet = document.createSheet(sheetName);
+        createRow(sheet, Values.getTitles());
     }
 
     private boolean createRow(@NotNull XSSFSheet sheet, @NotNull Values values) {
@@ -84,9 +96,11 @@ public class Writer {
         return false;
     }
 
-    private void writeDocument(@NotNull XSSFWorkbook document, @NotNull String filePath) throws IOException {
+    private void writeDocument(@NotNull XSSFWorkbook document, @NotNull String filePath)
+            throws IOException {
         FileOutputStream stream = new FileOutputStream(new File(filePath), true);
         document.write(stream);
         stream.close();
+        document.close();
     }
 }
