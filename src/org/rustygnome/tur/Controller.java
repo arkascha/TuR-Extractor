@@ -50,7 +50,7 @@ public class Controller {
             stringBuilder.append(
                     String.format(
                             "%s: %s",
-                            entry.getKey().toString(),
+                            entry.getKey().getTitle(),
                             entry.getValue()));
             if (iterator.hasNext()) {
                 stringBuilder.append("\n");

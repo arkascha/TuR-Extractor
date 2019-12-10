@@ -123,7 +123,7 @@ public class ValuesTest {
         Iterator<Values.Entry> iterator = entries.iterator();
         while (iterator.hasNext()) {
             Values.Entry entry = iterator.next();
-            assertEquals(entry.getKey().toString(), entry.getValue());
+            assertEquals(entry.getKey().getTitle(), entry.getValue());
         }
     }
 

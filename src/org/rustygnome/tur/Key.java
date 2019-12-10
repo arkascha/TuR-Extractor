@@ -1,18 +1,25 @@
 package org.rustygnome.tur;
 
 public enum Key {
-    NAME("Name"),
-    EMAIL("E-Mail"),
-    INTERESTS("Interessen"),
-    DATETIME("Zeitpunkt");
+    DATETIME(0, "Zeitpunkt"),
+    NAME(1, "Name"),
+    EMAIL(2, "E-Mail"),
+    INTERESTS(3, "Interessen");
 
+
+    private int index;
     private String name;
 
-    Key(String name) {
+    Key(int index, String name) {
+        this.index = index;
         this.name = name;
     }
 
-    public String toString() {
+    public String getTitle() {
         return name;
+    }
+
+    public int getIndex() {
+        return index;
     }
 }

@@ -22,7 +22,7 @@ public class Values {
         Iterator<Values.Entry> iterator = titles.entrySet().iterator();
         while (iterator.hasNext()) {
             Values.Entry entry = iterator.next();
-            titles.put(entry.getKey(), entry.getKey().toString());
+            titles.put(entry.getKey(), entry.getKey().getTitle());
         }
         return titles;
     }

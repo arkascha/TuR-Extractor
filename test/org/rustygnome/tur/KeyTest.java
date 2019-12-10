@@ -19,7 +19,7 @@ public class KeyTest {
     @ParameterizedTest
     @MethodSource("parameterProvider")
     public void keysShouldHaveTheExpectedName(Key key, String name) {
-        assertEquals(name, key.toString());
+        assertEquals(name, key.getTitle());
     }
 
     private static Stream<Arguments> parameterProvider() {
