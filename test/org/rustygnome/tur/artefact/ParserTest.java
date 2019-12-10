@@ -1,7 +1,10 @@
-package org.rustygnome.tur;
+package org.rustygnome.tur.artefact;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.rustygnome.tur.domain.Key;
+import org.rustygnome.tur.domain.Values;
+import org.rustygnome.tur.factory.Factory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -53,7 +56,7 @@ public class ParserTest {
         // when: the extraction is performed
         // then: an exception should get raised
         assertThrows(RuntimeException.class, () -> {
-            parser.extract(null);
+            parser.parse(null);
         });
     }
 
@@ -73,7 +76,7 @@ public class ParserTest {
         Parser parser = Parser.getInstance();
 
         // when: the extraction is performed
-        Values values = parser.extract(message);
+        Values values = parser.parse(message);
 
         // then: the values should be the expected ones
         assertEquals("In die Luft, Hans", values.get(Key.NAME));
@@ -99,7 +102,7 @@ public class ParserTest {
         // when: the extraction is performed
         // then: an exception should get raised
         assertThrows(RuntimeException.class, () -> {
-            parser.extract(message);
+            parser.parse(message);
         });
     }
 
@@ -119,7 +122,7 @@ public class ParserTest {
         Parser parser = Parser.getInstance();
 
         // when: the extraction is performed
-        Values values = parser.extract(message);
+        Values values = parser.parse(message);
 
         // then: the datetime value should have the expected format
         assertEquals("19.09.1999 09:19", values.get(Key.DATETIME));
@@ -141,7 +144,7 @@ public class ParserTest {
         Parser parser = Parser.getInstance();
 
         // when: the extraction is performed
-        Values values = parser.extract(message);
+        Values values = parser.parse(message);
 
         // then: the datetime value should have the expected format
         assertEquals("1999-A 16 GORKY", values.get(Key.DATETIME));

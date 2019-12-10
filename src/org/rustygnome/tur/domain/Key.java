@@ -1,4 +1,4 @@
-package org.rustygnome.tur;
+package org.rustygnome.tur.domain;
 
 public enum Key {
     DATETIME(0, "Zeitpunkt"),

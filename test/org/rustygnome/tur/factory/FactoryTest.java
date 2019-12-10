@@ -1,8 +1,10 @@
-package org.rustygnome.tur;
+package org.rustygnome.tur.factory;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.rustygnome.tur.artefact.*;
+import org.rustygnome.tur.factory.Factory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -81,6 +83,7 @@ public class FactoryTest {
 
     enum FactoredType {
         CONTROLLER(Controller.class),
+        LOGGER(Logger.class),
         PARSER(Parser.class),
         READER(Reader.class),
         WRITER(Writer.class);

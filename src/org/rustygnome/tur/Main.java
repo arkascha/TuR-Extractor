@@ -1,6 +1,8 @@
 package org.rustygnome.tur;
 
 import org.apache.commons.codec.DecoderException;
+import org.rustygnome.tur.artefact.Controller;
+import org.rustygnome.tur.artefact.Logger;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -14,12 +16,7 @@ public class Main {
             Controller controller = Controller.getInstance();
             controller.run();
         } catch(Exception e) {
-            System.out.println(
-                    String.format(
-                            "[%s %s] FAILURE\n\n",
-                            LocalDate.now(),
-                            LocalTime.now()
-                    ));
+            Logger.getInstance().log("FAILURE");
             throw e;
         }
     }

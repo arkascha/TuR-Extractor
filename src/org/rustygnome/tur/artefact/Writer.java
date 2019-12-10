@@ -1,12 +1,12 @@
-package org.rustygnome.tur;
+package org.rustygnome.tur.artefact;
 
 import com.sun.istack.internal.NotNull;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.rustygnome.tur.domain.Values;
+import org.rustygnome.tur.factory.Factory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -32,12 +32,20 @@ public class Writer {
         this.sheetName = DOCUMENT_SHEET_NAME;
     }
 
-    public boolean write(@NotNull Values values) throws IOException {
+    public Boolean write(@NotNull Values values)
+            throws IOException {
+        Boolean exported = false;
+
         XSSFWorkbook document = openDocument();
         XSSFSheet sheet = document.getSheet(sheetName);
-        boolean written = createRow(sheet, values);
-        writeDocument(document, filePath);
-        return written;
+        if (!rowExists(sheet, values)) {
+            createRow(sheet, values);
+            writeDocument(document, filePath);
+            exported = true;
+        }
+
+        document.close();
+        return exported;
     }
 
     private XSSFWorkbook openDocument()
@@ -47,10 +55,10 @@ public class Writer {
         if ((new File(filePath)).exists()) {
             FileInputStream file = new FileInputStream(new File(filePath));
             document = new XSSFWorkbook(file);
+            file.close();
             if (document.getSheet(sheetName) == null) {
                 createSheet(document, sheetName);
             }
-            file.close();
         } else {
             document = new XSSFWorkbook();
             createSheet(document, sheetName);
@@ -59,8 +67,7 @@ public class Writer {
         return document;
     }
 
-    private void createSheet(XSSFWorkbook document, String sheetName)
-            throws UnexpectedException {
+    private void createSheet(XSSFWorkbook document, String sheetName) {
         XSSFSheet sheet = document.createSheet(sheetName);
         Row row = sheet.createRow(0);
         for (Values.Entry entry : Values.getTitles().entrySet()) {
@@ -68,17 +75,11 @@ public class Writer {
         }
     }
 
-    private boolean createRow(@NotNull XSSFSheet sheet, @NotNull Values values)
-            throws UnexpectedException {
+    private void createRow(@NotNull XSSFSheet sheet, @NotNull Values values) {
         Row row = sheet.createRow(sheet.getLastRowNum() + 1);
-
-        if (!rowExists(sheet, values)) {
-            for (Values.Entry entry : values.entrySet()) {
-                row.createCell(entry.getKey().getIndex()).setCellValue(entry.getValue());
-            }
-            return true;
+        for (Values.Entry entry : values.entrySet()) {
+            row.createCell(entry.getKey().getIndex()).setCellValue(entry.getValue());
         }
-        return false;
     }
 
     private boolean rowExists(@NotNull XSSFSheet sheet, @NotNull Values values)
@@ -121,7 +122,7 @@ public class Writer {
             throws IOException {
         FileOutputStream stream = new FileOutputStream(new File(filePath), true);
         document.write(stream);
+        stream.flush();
         stream.close();
-        document.close();
     }
 }

@@ -1,4 +1,4 @@
-package org.rustygnome.tur;
+package org.rustygnome.tur.factory;
 
 import com.sun.istack.internal.NotNull;
 

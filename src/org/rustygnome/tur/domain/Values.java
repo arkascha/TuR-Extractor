@@ -1,4 +1,4 @@
-package org.rustygnome.tur;
+package org.rustygnome.tur.domain;
 
 import com.sun.istack.internal.NotNull;
 import org.apache.commons.collections4.list.TreeList;
@@ -37,6 +37,24 @@ public class Values {
 
     public String[] toArray() {
         return values.values().toArray(new String[0]);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        Iterator<Values.Entry> iterator = entrySet().iterator();
+        while (iterator.hasNext()) {
+            Values.Entry entry = iterator.next();
+            stringBuilder.append(
+                    String.format(
+                            "%s: %s",
+                            entry.getKey().getTitle(),
+                            entry.getValue()));
+            if (iterator.hasNext()) {
+                stringBuilder.append("\n");
+            }
+        }
+        return stringBuilder.toString();
     }
 
     public List<Entry> entrySet() {

@@ -1,4 +1,8 @@
-package org.rustygnome.tur;
+package org.rustygnome.tur.artefact;
+
+import org.rustygnome.tur.domain.Key;
+import org.rustygnome.tur.domain.Values;
+import org.rustygnome.tur.factory.Factory;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -24,7 +28,7 @@ public class Parser {
         return Factory.getInstance(Parser.class).createArtefact();
     }
 
-    public Values extract(String message) {
+    public Values parse(String message) {
         Pattern pattern = Pattern.compile(EXTRACTION_REGEX, Pattern.MULTILINE | Pattern.DOTALL);
         Matcher matcher = pattern.matcher(message);
         if(matcher.find()) {

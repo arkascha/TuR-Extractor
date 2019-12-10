@@ -1,13 +1,15 @@
-package org.rustygnome.tur;
+package org.rustygnome.tur.artefact;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.rustygnome.tur.artefact.Writer;
+import org.rustygnome.tur.factory.Factory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class ReaderTest {
+public class WriterTest {
 
     @BeforeEach
     public void clearFactory() {
@@ -19,10 +21,10 @@ public class ReaderTest {
             throws IllegalAccessException, InstantiationException {
 
         // when: getting an instance
-        Reader instance = Reader.getInstance();
+        Writer instance = Writer.getInstance();
 
         // then: it should be an instance
-        assertEquals(Reader.class, instance.getClass());
+        assertEquals(Writer.class, instance.getClass());
     }
 
     @Test
@@ -30,15 +32,16 @@ public class ReaderTest {
             throws InstantiationException, IllegalAccessException {
 
         // given: a mocked factory
-        Reader mockedReader = mock(Reader.class);
-        Factory<Reader> mockedFactory = mock(Factory.class);
-        when(mockedFactory.createArtefact()).thenReturn(mockedReader);
-        Factory.setInstance(Reader.class, mockedFactory);
+        Writer mockedWriter = mock(Writer.class);
+        Factory<Writer> mockedFactory = mock(Factory.class);
+        when(mockedFactory.createArtefact()).thenReturn(mockedWriter);
+        Factory.setInstance(Writer.class, mockedFactory);
 
         // when: getInstance() is called
-        Reader reader = Reader.getInstance();
+        Writer writer = Writer.getInstance();
 
         // then: the returned artefact should be the one created by the mocked factory
-        assertEquals(mockedReader, reader);
+        assertEquals(mockedWriter, writer);
     }
+
 }
