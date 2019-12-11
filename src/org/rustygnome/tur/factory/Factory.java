@@ -1,7 +1,9 @@
 package org.rustygnome.tur.factory;
 
 import com.sun.istack.internal.NotNull;
+import org.rustygnome.tur.Command;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,7 +31,8 @@ public class Factory<T> {
         this.type = type;
     }
 
-    public T createArtefact() throws IllegalAccessException, InstantiationException {
-        return type.newInstance();
+    public T createArtefact(Command command)
+            throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+        return type.getDeclaredConstructor(Command.class).newInstance(command);
     }
 }

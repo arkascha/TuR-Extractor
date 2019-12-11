@@ -3,6 +3,7 @@ package org.rustygnome.tur.factory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.rustygnome.tur.Command;
 import org.rustygnome.tur.artefact.*;
 import org.rustygnome.tur.factory.Factory;
 
@@ -11,6 +12,7 @@ import java.lang.reflect.Method;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -23,18 +25,19 @@ public class FactoryTest {
 
     @ParameterizedTest
     @EnumSource(FactoredType.class)
-    public void create_ShouldUseInstancesPreviouslySet(FactoredType factoredType)
+    public void createArtefact_ShouldUseInstancesPreviouslySet(FactoredType factoredType)
             throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 
         // given: a mocked factory
         Object mockedArtefact = mock(factoredType.type);
         Factory mockedFactory = mock(Factory.class);
-        when(mockedFactory.createArtefact()).thenReturn(mockedArtefact);
+        when(mockedFactory.createArtefact(any(Command.class))).thenReturn(mockedArtefact);
         Factory.setInstance(factoredType.type, mockedFactory);
 
-        // when: getInstance() is called
-        Method getInstance = factoredType.type.getMethod("getInstance");
-        Object artefact = getInstance.invoke(factoredType.type);
+        // when: createArtefact() is called
+        Method getFactory = factoredType.type.getMethod("getFactory");
+        Factory factory = (Factory) getFactory.invoke(null);
+        Object artefact = factory.createArtefact(mock(Command.class));
 
         // then: the returned artefact should be the one created by the mocked factory
         assertEquals(mockedArtefact, artefact);
@@ -48,19 +51,21 @@ public class FactoryTest {
         // given: a mocked factory
         Object mockedArtefact = mock(factoredType.type);
         Factory mockedFactory = mock(Factory.class);
-        when(mockedFactory.createArtefact()).thenReturn(mockedArtefact);
+        when(mockedFactory.createArtefact(any(Command.class))).thenReturn(mockedArtefact);
         Factory.setInstance(factoredType.type, mockedFactory);
 
-        // when: getInstance() is called
-        Method getInstance = factoredType.type.getMethod("getInstance");
-        Object artefact = getInstance.invoke(factoredType.type);
+        // when: createArtefact() is called
+        Method getFactory = factoredType.type.getMethod("getFactory");
+        Factory factory = (Factory) getFactory.invoke(null);
+        Object artefact = factory.createArtefact(mock(Command.class));
         // then: the returned artefact should be the one created by the mocked factory
         assertEquals(mockedArtefact, artefact);
 
         // when: factory is cleared
         Factory.clearInstances();
-        // and: getInstance() is called
-        artefact = getInstance.invoke(factoredType.type);
+        // and: createArtefact() is called again
+        factory = (Factory) getFactory.invoke(null);
+        artefact = factory.createArtefact(mock(Command.class));
         // then: the returned artefact should be the one created by the mocked factory
         assertNotEquals(mockedArtefact, artefact);
         assertEquals(factoredType.type, artefact.getClass());
@@ -75,7 +80,7 @@ public class FactoryTest {
         Factory factory = Factory.getInstance(factoredType.type);
 
         // when: createArtefact() is called
-        Object artefact = factory.createArtefact();
+        Object artefact = factory.createArtefact(mock(Command.class));
 
         // then: the returned artefact should have the desired type
         assertEquals(factoredType.type, artefact.getClass());

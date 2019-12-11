@@ -5,42 +5,36 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.rustygnome.tur.Command;
 import org.rustygnome.tur.domain.Values;
 import org.rustygnome.tur.factory.Factory;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.rmi.UnexpectedException;
 import java.util.Iterator;
 
-public class Writer {
+public class Writer
+        extends Artefact {
 
-    static final String DOCUMENT_FILE_PATH = "/home/arkascha/Projects/TuR-Extractor/work/artefacts/contact_form.xlsx";
-    static final String DOCUMENT_SHEET_NAME = "Kontaktformular";
-
-    private String filePath;
-    private String sheetName;
-
-    static public Writer getInstance() throws InstantiationException, IllegalAccessException {
-        return Factory.getInstance(Writer.class).createArtefact();
+    static public Factory<Writer> getFactory() {
+        return Factory.getInstance(Writer.class);
     }
 
-    public Writer() {
-        this.filePath = DOCUMENT_FILE_PATH;
-        this.sheetName = DOCUMENT_SHEET_NAME;
+    public Writer(Command command) {
+        super(command);
     }
 
-    public Boolean write(@NotNull Values values)
+    public boolean write(@NotNull Values values)
             throws IOException {
-        Boolean exported = false;
+        boolean exported = false;
+        String outputPath = command.getOption("output");
+        String sheetName = command.getOption("sheet", "Kontakte");
 
-        XSSFWorkbook document = openDocument();
+        XSSFWorkbook document = openDocument(outputPath, sheetName);
         XSSFSheet sheet = document.getSheet(sheetName);
         if (!rowExists(sheet, values)) {
             createRow(sheet, values);
-            writeDocument(document, filePath);
+            writeDocument(document, outputPath);
             exported = true;
         }
 
@@ -48,12 +42,12 @@ public class Writer {
         return exported;
     }
 
-    private XSSFWorkbook openDocument()
+    private XSSFWorkbook openDocument(@NotNull String outputPath, String sheetName)
             throws IOException {
         XSSFWorkbook document;
 
-        if ((new File(filePath)).exists()) {
-            FileInputStream file = new FileInputStream(new File(filePath));
+        if ((new File(outputPath)).exists()) {
+            FileInputStream file = new FileInputStream(new File(outputPath));
             document = new XSSFWorkbook(file);
             file.close();
             if (document.getSheet(sheetName) == null) {

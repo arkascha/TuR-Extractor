@@ -1,5 +1,6 @@
 package org.rustygnome.tur.artefact;
 
+import org.rustygnome.tur.Command;
 import org.rustygnome.tur.domain.Key;
 import org.rustygnome.tur.domain.Values;
 import org.rustygnome.tur.factory.Factory;
@@ -10,9 +11,9 @@ import java.time.format.DateTimeParseException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Parser {
+public class Parser
+        extends Artefact {
 
-    //private final String DATE_PATTERN = "yyyy-MM==2Ddd HH:mm:ss";
     private final String DATE_PATTERN = "yyyy-MM'= =2D'dd HH:mm:ss";
     private final String DATE_FORMAT = "dd.MM.yyyy HH:mm";
     private final String EXTRACTION_REGEX =
@@ -24,8 +25,12 @@ public class Parser {
 
     private Values values = new Values();
 
-    static public Parser getInstance() throws InstantiationException, IllegalAccessException {
-        return Factory.getInstance(Parser.class).createArtefact();
+    static public Factory<Parser> getFactory() {
+        return Factory.getInstance(Parser.class);
+    }
+
+    public Parser(Command command) {
+        super(command);
     }
 
     public Values parse(String message) {

@@ -1,16 +1,22 @@
 package org.rustygnome.tur.artefact;
 
 import com.sun.istack.internal.NotNull;
+import org.rustygnome.tur.Command;
 import org.rustygnome.tur.domain.Values;
 import org.rustygnome.tur.factory.Factory;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class Logger {
+public class Logger
+        extends Artefact {
 
-    static public Logger getInstance() throws IllegalAccessException, InstantiationException {
-        return Factory.getInstance(Logger.class).createArtefact();
+    static public Factory<Logger> getFactory() {
+        return Factory.getInstance(Logger.class);
+    }
+
+    public Logger(Command command) {
+        super(command);
     }
 
     public void log(@NotNull String message) {
