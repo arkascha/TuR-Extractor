@@ -1,0 +1,56 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+apply plugin: 'java'
+
+project.version = '0.1.0'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    implementation 'commons-cli:commons-cli:1.4'
+    implementation 'org.apache.poi:poi-ooxml:4.1.1'
+    implementation 'org.apache.poi:poi:4.1.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.5.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.5.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.5.2'
+    testImplementation 'org.mockito:junit-jupiter:2.20.0'
+    testImplementation 'org.mockito:mockito-core:2.2.7'
+}
+
+jar {
+    baseName = project.name.toLowerCase()
+    version =  project.version
+
+    manifest {
+        attributes 'Main-Class': 'org.rustygnome.tur.Application'
+    }
+    from {
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+}
+
+task allJar(type: Jar) {
+    baseName = project.name.toLowerCase() + '-all'
+    version =  project.version
+
+    manifest {
+        attributes 'Main-Class': 'org.rustygnome.tur.Application'
+    }
+    from {
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    with jar
+}
