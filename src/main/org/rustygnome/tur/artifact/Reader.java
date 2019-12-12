@@ -24,11 +24,14 @@ public class Reader
     public String read(InputStreamReader inputReader)
             throws IOException, DecoderException {
 
-        CharBuffer inputBuffer = CharBuffer.allocate(10000);
-        inputReader.read(inputBuffer);
-        inputBuffer.flip();
-//        return decodeInput(inputBuffer.toString());
-        return inputBuffer.toString();
+        if (inputReader != null) {
+            CharBuffer inputBuffer = CharBuffer.allocate(10000);
+            inputReader.read(inputBuffer);
+            inputBuffer.flip();
+//            return decodeInput(inputBuffer.toString());
+            return inputBuffer.toString();
+        }
+        return null;
     }
 
     private String decodeInput(String string)

@@ -23,9 +23,10 @@ Those messages can be fed as a sequence in one of theses ways
 `java -jar /path/to/TuR-Extractor <options>`
 
 `<options>`: 
-* `-o <path>` | `--output=<path>`: (mandatory) a local file system path to the target spreadsheet document
-* `-i <path>` | `--input=<path>`: (optional, defaults to STDIN) a local file system path to the input message file
+* `-i <path>` | `--input=<path>`: (optional) a local file system path to the input message file, "-" selects STDIN
+* `-o <path>` | `--output=<path>`: (optional) a local file system path to the target spreadsheet document
 * `-s <name>` | `--sheet=<name>`: (optional, defaults to "Contacts") the title of the target document sheet 
+* `-v` | `--version`: (optional) outputs the utilities name and version number
 
 `<path>`: a local file system path (e.g. /var/spool/messages/inbound)
 

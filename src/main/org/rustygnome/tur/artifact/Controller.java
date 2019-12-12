@@ -37,20 +37,25 @@ public class Controller
     public void run()
             throws IOException, DecoderException, MissingArgumentException {
 
-        InputStreamReader input = setupInput(command.getOption("input", null));
-
-        String message = reader.read(input);
+        String message = reader.read(setupInput());
         Values values = parser.parse(message);
         boolean exported = writer.write(values);
         logger.log(exported, values);
     }
 
-    private InputStreamReader setupInput(String inputOption)
+    private InputStreamReader setupInput()
             throws FileNotFoundException {
-        if (inputOption == null) {
+
+        if (command.hasOption("input")) {
+
+            String inputOptionValue = command.getOptionValue("input", null);
+            if (inputOptionValue.equals("-")) {
+                System.err.println("Reading from stdin...");
+                return new InputStreamReader(new FileInputStream(inputOptionValue));
+            }
             return new InputStreamReader(System.in);
-        } else {
-            return new InputStreamReader(new FileInputStream(inputOption));
         }
+
+        return null;
     }
 }

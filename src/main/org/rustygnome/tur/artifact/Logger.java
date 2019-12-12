@@ -27,10 +27,10 @@ public class Logger
                 message));
     }
 
-    public void log(boolean exported, @NotNull Values values) {
+    public void log(boolean exported, Values values) {
         log(String.format(
                 "%s: \n%s",
                 exported ? "EXPORTED" : "IGNORED",
-                values.toString()));
+                values != null ? values.toString() : "-/-"));
     }
 }

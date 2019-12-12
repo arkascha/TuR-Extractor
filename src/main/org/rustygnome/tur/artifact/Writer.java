@@ -27,21 +27,33 @@ public class Writer
         super(command);
     }
 
-    public boolean write(@NotNull Values values)
+    public boolean write(Values values)
+            throws IOException {
+
+        if (values != null) {
+            if (command.hasOption("output")) {
+                return writeToXlsx(values);
+            }
+        }
+        return false;
+    }
+
+    private boolean writeToXlsx(@NotNull Values values)
             throws IOException {
         boolean exported = false;
-        String outputPath = command.getOption("output");
-        String sheetName = command.getOption("sheet", "Kontakte");
 
+        String outputPath = command.getOptionValue("output");
+        String sheetName = command.getOptionValue("sheet", "Kontakte");
         XSSFWorkbook document = openDocument(outputPath, sheetName);
         XSSFSheet sheet = document.getSheet(sheetName);
+
         if (!rowExists(sheet, values)) {
             createRow(sheet, values);
             writeDocument(document, outputPath);
             exported = true;
         }
-
         document.close();
+
         return exported;
     }
 

@@ -17,12 +17,16 @@ public class Command {
         options.addOption(input);
 
         Option output = new Option("o", "output", true, "output file path");
-        output.setRequired(true);
+        output.setRequired(false);
         options.addOption(output);
 
         Option sheet = new Option("s", "sheet", true, "document sheet name");
         sheet.setRequired(false);
         options.addOption(sheet);
+
+        Option version = new Option("v", "version", false, "version number");
+        version.setRequired(false);
+        options.addOption(version);
 
         return this;
     }
@@ -34,7 +38,7 @@ public class Command {
         try {
             cmd = parser.parse(options, args);
         } catch (ParseException e) {
-            System.out.println(e.getMessage());
+            System.err.println(e.getMessage());
             formatter.printHelp(COMMAND_NAME, options);
 
             System.exit(1);
@@ -43,19 +47,15 @@ public class Command {
         return this;
     }
 
-    public String getOption(String optionName) {
+    public boolean hasOption(String optionName) {
+        return cmd.hasOption(optionName);
+    }
+
+    public String getOptionValue(String optionName) {
         return cmd.getOptionValue(optionName);
     }
 
-    public String getOption(String optionName, String defaultValue) {
+    public String getOptionValue(String optionName, String defaultValue) {
         return cmd.getOptionValue(optionName, defaultValue);
-    }
-
-    public String getOption(char optionChar) {
-        return cmd.getOptionValue(optionChar);
-    }
-
-    public String getOption(char optionChar, String defaultValue) {
-        return cmd.getOptionValue(optionChar, defaultValue);
     }
 }

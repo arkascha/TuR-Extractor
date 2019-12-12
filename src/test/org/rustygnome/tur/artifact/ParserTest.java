@@ -9,8 +9,7 @@ import org.rustygnome.tur.factory.Factory;
 
 import java.lang.reflect.InvocationTargetException;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -58,10 +57,10 @@ public class ParserTest {
         Parser parser = Parser.getFactory().createArtifact(mock(Command.class));
 
         // when: the extraction is performed
-        // then: an exception should get raised
-        assertThrows(RuntimeException.class, () -> {
-            parser.parse(null);
-        });
+        Values values = parser.parse(null);
+
+        // then: a placeholder output should appear in STDOUT
+        assertNull(values);
     }
 
     @Test

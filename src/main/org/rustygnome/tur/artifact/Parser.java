@@ -34,16 +34,21 @@ public class Parser
     }
 
     public Values parse(String message) {
-        Pattern pattern = Pattern.compile(EXTRACTION_REGEX, Pattern.MULTILINE | Pattern.DOTALL);
-        Matcher matcher = pattern.matcher(message);
-        if(matcher.find()) {
-            values.put(Key.NAME, normalizeString(matcher.group(1)));
-            values.put(Key.EMAIL, normalizeString(matcher.group(2)));
-            values.put(Key.INTERESTS, normalizeString(matcher.group(3)));
-            values.put(Key.DATETIME, normalizeDatetime(normalizeString(matcher.group(4))));
-            return values;
+
+        if (message != null) {
+            final Pattern pattern = Pattern.compile(EXTRACTION_REGEX, Pattern.MULTILINE | Pattern.DOTALL);
+            final Matcher matcher = pattern.matcher(message);
+            if (matcher.find()) {
+                values.put(Key.NAME, normalizeString(matcher.group(1)));
+                values.put(Key.EMAIL, normalizeString(matcher.group(2)));
+                values.put(Key.INTERESTS, normalizeString(matcher.group(3)));
+                values.put(Key.DATETIME, normalizeDatetime(normalizeString(matcher.group(4))));
+                return values;
+            }
+            throw new RuntimeException("Failed to parse message");
         }
-        throw new RuntimeException("Failed to parse message");
+
+        return null;
     }
 
     private String normalizeString(String string) {
