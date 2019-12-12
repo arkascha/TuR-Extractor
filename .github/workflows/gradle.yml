@@ -14,9 +14,9 @@ jobs:
       with:
         java-version: 1.8
     - name: Build artifact with Gradle
-      run: ./gradlew allJar
+      run: ./gradlew jar allJar
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
       with: 
-        name: TUR-Extractor-artifact
+        name: TUR-Extractor
         path: build/libs
