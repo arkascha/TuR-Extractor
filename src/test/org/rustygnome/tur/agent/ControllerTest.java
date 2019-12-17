@@ -32,7 +32,7 @@ public class ControllerTest {
             throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
 
         // when: getting an instance
-        Controller instance = Controller.getFactory().createArtifact(mock(Command.class));
+        Controller instance = Controller.getInstance(mock(Command.class));
 
         // then: it should be an instance
         assertEquals(Controller.class, instance.getClass());
@@ -121,7 +121,7 @@ public class ControllerTest {
         // then: the output should contain the package information
         String expectedInformation = String.format(
                 "%s (version %s)",
-                Application.packageName,
+                Application.packageTitle,
                 Application.packageVersion);
         assertEquals(expectedInformation, stdErr.toString().trim());
     }

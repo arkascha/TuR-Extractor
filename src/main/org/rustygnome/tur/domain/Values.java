@@ -1,7 +1,7 @@
 package org.rustygnome.tur.domain;
 
-import org.jetbrains.annotations.NotNull;
 import org.apache.commons.collections4.list.TreeList;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 import java.util.List;

@@ -50,7 +50,7 @@ public class LoggerTest {
     private Command aCliCommand(String[] args)
             throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         return Command
-                .getInstance(null)
+                .getInstance()
                 .setupOptions()
                 .processArgs(args);
     }

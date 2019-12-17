@@ -3,6 +3,8 @@ package org.rustygnome.tur.agent;
 import org.apache.commons.codec.DecoderException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.rustygnome.tur.Command;
 import org.rustygnome.tur.factory.Factory;
 
@@ -26,7 +28,7 @@ public class ReaderTest {
             throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
 
         // when: getting an instance
-        Reader instance = Reader.getFactory().createArtifact(mock(Command.class));
+        Reader instance = Reader.getInstance(mock(Command.class));
 
         // then: it should be an instance
         assertEquals(Reader.class, instance.getClass());
@@ -52,19 +54,13 @@ public class ReaderTest {
         assertEquals(mockedReader, reader);
     }
 
-    @Test
-    public void readWithoutAnInputSpecified_shouldReadNothing() {
-
-        // given: no input to read
-    }
-
-    @Test
-    public void readInput_shouldReadTheInput()
+    @ParameterizedTest
+    @ValueSource(strings = {"Das Pferd frisst keinen Kartoffelsalat.", ""})
+    public void readInput_shouldReadTheInput(String input)
             throws IllegalAccessException, InstantiationException, IOException, DecoderException, NoSuchMethodException, InvocationTargetException {
 
         // given: some input to read
-        final String INPUT = "Das Pferd frisst keinen Kartoffelsalat.";
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(INPUT.getBytes());
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
 
         // and: a Reader reading that input
         Reader reader = Reader.getFactory().createArtifact(mock(Command.class));
@@ -73,6 +69,6 @@ public class ReaderTest {
         String output = reader.read(inputStream);
 
         // then: the input should actually get read
-        assertEquals(INPUT, output);
+        assertEquals(input, output);
     }
 }

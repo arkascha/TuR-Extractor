@@ -1,22 +1,48 @@
 package org.rustygnome.tur;
 
+import org.apache.commons.cli.MissingArgumentException;
+import org.apache.commons.codec.DecoderException;
+import org.jetbrains.annotations.Nullable;
 import org.rustygnome.tur.agent.Controller;
 import org.rustygnome.tur.agent.Logger;
+import org.rustygnome.tur.factory.Factored;
+import org.rustygnome.tur.factory.Factory;
 
-public class Application {
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 
-    static public String packageName = "???";
+public class Application
+        extends Factored {
+
+    static public String packageTitle = "???";
     static public String packageVersion = "???";
+
+    static public Factory<Application> getFactory() {
+        return Factory.getInstance(Application.class);
+    }
+
+    static public Application getInstance()
+            throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        return getFactory().createArtifact(null);
+    }
 
     static public void main(String[] args)
             throws Exception {
+        getInstance().startUp(args);
+    }
+
+    public Application(Command command) {
+        super(command);
+        readPackageInformation(Application.class.getPackage());
+    }
+
+    void startUp(String[] args)
+            throws Exception {
 
         Command command = Command
-                .getInstance(null)
+                .getInstance()
                 .setupOptions()
                 .processArgs(args);
-
-        readPackageInformation();
 
         try {
             Controller controller = Controller.getFactory().createArtifact(command);
@@ -29,11 +55,10 @@ public class Application {
         }
     }
 
-    static void readPackageInformation() {
-        Package applicationPackage = Application.class.getPackage();
+    void readPackageInformation(Package applicationPackage) {
         if (applicationPackage != null) {
-            packageName = applicationPackage.getName();
-            packageVersion = applicationPackage.getImplementationTitle();
+            packageTitle = applicationPackage.getImplementationTitle();
+            packageVersion = applicationPackage.getImplementationVersion();
         }
     }
 }

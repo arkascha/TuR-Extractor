@@ -9,10 +9,8 @@ import org.rustygnome.tur.factory.Factory;
 import java.lang.reflect.InvocationTargetException;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
 
 public class CommandTest {
 
@@ -31,7 +29,7 @@ public class CommandTest {
             throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
 
         // when: getting an instance
-        Command instance = Command.getFactory().createArtifact(null);
+        Command instance = Command.getInstance();
 
         // then: it should be an instance
         assertEquals(Command.class, instance.getClass());
@@ -48,7 +46,7 @@ public class CommandTest {
         Factory.setInstance(Command.class, mockedFactory);
 
         // when: getInstance() is called
-        Command command = Command.getInstance(null);
+        Command command = Command.getInstance();
 
         // then: the factories createArtefact method should get called
         verify(mockedFactory, times(1)).createArtifact(eq(null));

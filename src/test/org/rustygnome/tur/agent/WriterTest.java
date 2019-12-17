@@ -10,7 +10,6 @@ import java.lang.reflect.InvocationTargetException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
 
 public class WriterTest {
 
@@ -24,7 +23,7 @@ public class WriterTest {
             throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
 
         // when: getting an instance
-        Writer instance = Writer.getFactory().createArtifact(mock(Command.class));
+        Writer instance = Writer.getInstance(mock(Command.class));
 
         // then: it should be an instance
         assertEquals(Writer.class, instance.getClass());

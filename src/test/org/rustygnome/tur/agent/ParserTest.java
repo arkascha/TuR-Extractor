@@ -12,7 +12,6 @@ import java.lang.reflect.InvocationTargetException;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
 
 public class ParserTest {
 
@@ -26,7 +25,7 @@ public class ParserTest {
             throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
 
         // when: getting an instance
-        Parser instance = Parser.getFactory().createArtifact(mock(Command.class));
+        Parser instance = Parser.getInstance(mock(Command.class));
 
         // then: it should be an instance
         assertEquals(Parser.class, instance.getClass());

@@ -18,9 +18,9 @@ public class Command
         return Factory.getInstance(Command.class);
     }
 
-    static public Command getInstance(Command command)
+    static public Command getInstance()
             throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        return getFactory().createArtifact(command);
+        return getFactory().createArtifact(null);
     }
 
     public Command(Command command)

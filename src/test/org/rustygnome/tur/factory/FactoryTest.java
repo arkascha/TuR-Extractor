@@ -3,6 +3,7 @@ package org.rustygnome.tur.factory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.rustygnome.tur.Application;
 import org.rustygnome.tur.Command;
 import org.rustygnome.tur.agent.*;
 
@@ -86,6 +87,8 @@ public class FactoryTest {
     }
 
     enum FactoredType {
+        APPLICATION(Application.class),
+        COMMAND(Command.class),
         CONTROLLER(Controller.class),
         LOGGER(Logger.class),
         PARSER(Parser.class),

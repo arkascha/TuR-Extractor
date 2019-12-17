@@ -4,6 +4,7 @@ buildscript {
     }
     dependencies {
         classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.2'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.1'
     }}
 
 plugins {
@@ -19,6 +20,7 @@ repositories {
 apply plugin: 'application'
 apply plugin: 'java'
 apply plugin: 'idea'
+apply plugin: 'com.github.johnrengelman.shadow'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -60,28 +62,17 @@ dependencies {
 }
 
 jar {
-    baseName = project.name.toLowerCase()
-
     manifest {
+        attributes 'Implementation-URL': 'https://github.com/arkascha/TuR-Extractor'
+        attributes 'Implementation-Title': 'TuR-Extractor'
+        attributes 'Implementation-Vendor': 'Rusty Gnome'
+        attributes 'Implementation-Version': '0.0.7'
         attributes 'Main-Class': 'org.rustygnome.tur.Application'
     }
-    from {
-        configurations.compile.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-    }
+    enabled = false
+    dependsOn([shadowJar])
 }
 
-task allJar(type: Jar) {
-    baseName = project.name.toLowerCase() + '-all'
-
-    manifest {
-        attributes 'Main-Class': 'org.rustygnome.tur.Application'
-    }
-    from {
-        configurations.runtimeClasspath.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-    }
-    with jar
+shadowJar {
+    mergeServiceFiles()
 }

@@ -1,6 +1,7 @@
 package org.rustygnome.tur.factory;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.rustygnome.tur.Command;
 
 import java.lang.reflect.InvocationTargetException;
@@ -31,7 +32,7 @@ public class Factory<T> {
         this.type = type;
     }
 
-    public T createArtifact(Command command)
+    public T createArtifact(@Nullable Command command)
             throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         return type.getDeclaredConstructor(Command.class).newInstance(command);
     }

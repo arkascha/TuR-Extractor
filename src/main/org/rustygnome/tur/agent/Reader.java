@@ -30,7 +30,7 @@ public class Reader
     }
 
     public String read(InputStream inputStream)
-            throws IOException, DecoderException {
+            throws IOException {
 
         if (inputStream != null) {
             CharBuffer inputBuffer = CharBuffer.allocate(10000);

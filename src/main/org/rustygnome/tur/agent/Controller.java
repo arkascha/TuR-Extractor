@@ -1,6 +1,5 @@
 package org.rustygnome.tur.agent;
 
-import org.apache.commons.cli.MissingArgumentException;
 import org.apache.commons.codec.DecoderException;
 import org.rustygnome.tur.Application;
 import org.rustygnome.tur.Command;
@@ -8,7 +7,10 @@ import org.rustygnome.tur.domain.Values;
 import org.rustygnome.tur.factory.Factored;
 import org.rustygnome.tur.factory.Factory;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 
 public class Controller
@@ -43,7 +45,7 @@ public class Controller
     }
 
     public void run()
-            throws IOException, DecoderException, MissingArgumentException {
+            throws IOException, DecoderException {
 
         String message = reader.read(setupInput());
         Values values = parser.parse(message);
@@ -69,7 +71,7 @@ public class Controller
     void outputPackageInformation() {
         System.err.println(String.format(
                 "%s (version %s)",
-                Application.packageName,
+                Application.packageTitle,
                 Application.packageVersion));
     }
 }
