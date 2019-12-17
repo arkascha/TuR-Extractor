@@ -1,10 +1,12 @@
-package org.rustygnome.tur.artifact;
+package org.rustygnome.tur.agent;
 
 import org.rustygnome.tur.Command;
 import org.rustygnome.tur.domain.Key;
 import org.rustygnome.tur.domain.Values;
+import org.rustygnome.tur.factory.Factored;
 import org.rustygnome.tur.factory.Factory;
 
+import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -12,7 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Parser
-        extends Artifact {
+        extends Factored {
 
     private final String DATE_PATTERN = "yyyy-MM'= =2D'dd HH:mm:ss";
     private final String DATE_FORMAT = "dd.MM.yyyy HH:mm";
@@ -27,6 +29,11 @@ public class Parser
 
     static public Factory<Parser> getFactory() {
         return Factory.getInstance(Parser.class);
+    }
+
+    static public Parser getInstance(Command command)
+            throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        return getFactory().createArtifact(command);
     }
 
     public Parser(Command command) {

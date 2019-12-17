@@ -1,12 +1,12 @@
-package org.rustygnome.tur.artifact;
+package org.rustygnome.tur.factory;
 
 import org.rustygnome.tur.Command;
 
-abstract public class Artifact {
+abstract public class Factored {
 
     protected Command command;
 
-    public Artifact(Command command) {
+    public Factored(Command command) {
         this.command = command;
     }
 }

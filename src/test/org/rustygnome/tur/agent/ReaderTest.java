@@ -1,4 +1,4 @@
-package org.rustygnome.tur.artifact;
+package org.rustygnome.tur.agent;
 
 import org.apache.commons.codec.DecoderException;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,8 +13,8 @@ import java.lang.reflect.InvocationTargetException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 
 public class ReaderTest {
 
@@ -24,7 +24,7 @@ public class ReaderTest {
     }
 
     @Test
-    public void creatingAnInstance_ShouldReturnAnInstance()
+    public void creatingAnInstance_shouldReturnAnInstance()
             throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
 
         // when: getting an instance
@@ -35,7 +35,7 @@ public class ReaderTest {
     }
 
     @Test
-    public void getInstance_ShouldUseTheFactory()
+    public void getInstance_shouldUseTheFactory()
             throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 
         // given: a mocked factory
@@ -45,26 +45,34 @@ public class ReaderTest {
         Factory.setInstance(Reader.class, mockedFactory);
 
         // when: getInstance() is called
-        Reader reader = Reader.getFactory().createArtifact(mock(Command.class));
+        Reader reader = Reader.getInstance(mock(Command.class));
 
-        // then: the returned artifact should be the one created by the mocked factory
+        // then: the factories createArtefact method should get called
+        verify(mockedFactory, times(1)).createArtifact(any(Command.class));
+
+        // and: the returned artifact should be the one created by the mocked factory
         assertEquals(mockedReader, reader);
     }
 
     @Test
-    public void readInput_ShouldReadTheInput()
+    public void readWithoutAnInputSpecified_shouldReadNothing() {
+
+        // given: no input to read
+    }
+
+    @Test
+    public void readInput_shouldReadTheInput()
             throws IllegalAccessException, InstantiationException, IOException, DecoderException, NoSuchMethodException, InvocationTargetException {
 
         // given: some input to read
         final String INPUT = "Das Pferd frisst keinen Kartoffelsalat.";
-        ByteArrayInputStream bais = new ByteArrayInputStream(INPUT.getBytes());
-        InputStreamReader input = new InputStreamReader(bais);
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(INPUT.getBytes());
 
         // and: a Reader reading that input
         Reader reader = Reader.getFactory().createArtifact(mock(Command.class));
 
         // when: input is read
-        String output = reader.read(input);
+        String output = reader.read(inputStream);
 
         // then: the input should actually get read
         assertEquals(INPUT, output);

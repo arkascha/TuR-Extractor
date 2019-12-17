@@ -1,30 +1,39 @@
-package org.rustygnome.tur.artifact;
+package org.rustygnome.tur.agent;
 
 import org.apache.commons.codec.DecoderException;
 import org.rustygnome.tur.Command;
+import org.rustygnome.tur.factory.Factored;
 import org.rustygnome.tur.factory.Factory;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
 
 public class Reader
-        extends Artifact {
+        extends Factored {
 
     static public Factory<Reader> getFactory() {
         return Factory.getInstance(Reader.class);
+    }
+
+    static public Reader getInstance(Command command)
+            throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        return getFactory().createArtifact(command);
     }
 
     public Reader(Command command) {
         super(command);
     }
 
-    public String read(InputStreamReader inputReader)
+    public String read(InputStream inputStream)
             throws IOException, DecoderException {
 
-        if (inputReader != null) {
+        if (inputStream != null) {
+            InputStreamReader inputReader = new InputStreamReader(inputStream);
             CharBuffer inputBuffer = CharBuffer.allocate(10000);
             inputReader.read(inputBuffer);
             inputBuffer.flip();

@@ -4,8 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.rustygnome.tur.Command;
-import org.rustygnome.tur.artifact.*;
-import org.rustygnome.tur.factory.Factory;
+import org.rustygnome.tur.agent.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -25,7 +24,7 @@ public class FactoryTest {
 
     @ParameterizedTest
     @EnumSource(FactoredType.class)
-    public void createArtifact_ShouldUseInstancesPreviouslySet(FactoredType factoredType)
+    public void createArtifact_shouldUseInstancesPreviouslySet(FactoredType factoredType)
             throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 
         // given: a mocked factory
@@ -45,7 +44,7 @@ public class FactoryTest {
 
     @ParameterizedTest
     @EnumSource(FactoredType.class)
-    public void clearInstances_ShouldClearInstances(FactoredType factoredType)
+    public void clearInstances_shouldClearInstances(FactoredType factoredType)
             throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 
         // given: a mocked factory
@@ -73,7 +72,7 @@ public class FactoryTest {
 
     @ParameterizedTest
     @EnumSource(FactoredType.class)
-    public void createArtifact_ShouldCreateArtifactsOfDesiredType(FactoredType factoredType)
+    public void createArtifact_shouldCreateArtifactsOfDesiredType(FactoredType factoredType)
             throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 
         // given: a factory

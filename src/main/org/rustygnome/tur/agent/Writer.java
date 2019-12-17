@@ -1,4 +1,4 @@
-package org.rustygnome.tur.artifact;
+package org.rustygnome.tur.agent;
 
 import org.jetbrains.annotations.NotNull;
 import org.apache.poi.ss.usermodel.Cell;
@@ -7,20 +7,27 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.rustygnome.tur.Command;
 import org.rustygnome.tur.domain.Values;
+import org.rustygnome.tur.factory.Factored;
 import org.rustygnome.tur.factory.Factory;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.rmi.UnexpectedException;
 import java.util.Iterator;
 
 public class Writer
-        extends Artifact {
+        extends Factored {
 
     static public Factory<Writer> getFactory() {
         return Factory.getInstance(Writer.class);
+    }
+
+    static public Writer getInstance(Command command)
+            throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        return getFactory().createArtifact(command);
     }
 
     public Writer(Command command) {

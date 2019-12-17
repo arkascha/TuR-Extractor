@@ -1,18 +1,25 @@
-package org.rustygnome.tur.artifact;
+package org.rustygnome.tur.agent;
 
 import org.jetbrains.annotations.NotNull;
 import org.rustygnome.tur.Command;
 import org.rustygnome.tur.domain.Values;
+import org.rustygnome.tur.factory.Factored;
 import org.rustygnome.tur.factory.Factory;
 
+import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class Logger
-        extends Artifact {
+        extends Factored {
 
     static public Factory<Logger> getFactory() {
         return Factory.getInstance(Logger.class);
+    }
+
+    static public Logger getInstance(Command command)
+            throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        return getFactory().createArtifact(command);
     }
 
     public Logger(Command command) {

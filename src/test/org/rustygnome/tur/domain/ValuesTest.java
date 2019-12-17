@@ -37,7 +37,7 @@ public class ValuesTest {
 
     @ParameterizedTest
     @MethodSource("parameterProvider")
-    public void getTitles_ShouldCreateValuesWithTheExpectedTitle(Key key, int Index, String title) {
+    public void getTitles_shouldCreateValuesWithTheExpectedTitle(Key key, int Index, String title) {
 
         // given: some arbitrary values
         Values values = Values.getTitles();
@@ -48,7 +48,7 @@ public class ValuesTest {
 
     @ParameterizedTest
     @MethodSource("parameterProvider")
-    public void putAndGet_ShouldDoWhatYouWouldExpectFromThem(Key key, int Index, String title) {
+    public void putAndGet_shouldDoWhatYouWouldExpectFromThem(Key key, int Index, String title) {
 
         // given: some arbitrary values
         Values values = Values.getTitles();
@@ -61,7 +61,7 @@ public class ValuesTest {
     }
 
     @Test
-    public void put_ShouldActuallyOverwriteValues() {
+    public void put_shouldActuallyOverwriteValues() {
 
         // given: some arbitrary values
         Values values = Values.getTitles();
@@ -85,7 +85,7 @@ public class ValuesTest {
     }
 
     @Test
-    public void put_ShouldPreserveTheOrderOfEntries() {
+    public void put_shouldPreserveTheOrderOfEntries() {
 
         // given: some arbitrary values
         Values values = Values.getTitles();
@@ -110,7 +110,7 @@ public class ValuesTest {
     }
 
     @Test
-    public void toArray_ShouldReturnAnArrayHoldingValues() {
+    public void toArray_shouldReturnAnArrayHoldingValues() {
 
         // given: some arbitrary values
         Values values = Values.getTitles();
@@ -126,24 +126,24 @@ public class ValuesTest {
     }
 
     @Test
-    public void toString_ShouldReturnTheExpectedStringRepresentation() {
+    public void toString_shouldReturnTheExpectedStringRepresentation() {
 
         // given: some arbitrary values
         Values values = Values.getTitles();
 
         // when: we expect a specific representation of the values
         String string =
-                "Zeitpunkt: Zeitpunkt\n" +
-                "Name: Name\n" +
-                "E-Mail: E-Mail\n" +
-                "Interessen: Interessen";
+                "| Zeitpunkt: Zeitpunkt\n" +
+                "| Name: Name\n" +
+                "| E-Mail: E-Mail\n" +
+                "| Interessen: Interessen";
 
         // then: the string should represent the values as expected
         assertEquals(string, values.toString());
     }
 
     @Test
-    public void entrySet_ShouldReturnAFullEntrySet() {
+    public void entrySet_shouldReturnAFullEntrySet() {
 
         // given: some arbitrary values
         Values values = Values.getTitles();

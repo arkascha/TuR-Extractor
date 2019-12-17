@@ -1,13 +1,32 @@
 package org.rustygnome.tur;
 
 import org.apache.commons.cli.*;
+import org.rustygnome.tur.factory.Factored;
+import org.rustygnome.tur.factory.Factory;
 
-public class Command {
+import java.lang.reflect.InvocationTargetException;
+
+public class Command
+        extends Factored {
 
     static private final String COMMAND_NAME = "tur-extract";
 
     private Options options;
     private CommandLine cmd;
+
+    static public Factory<Command> getFactory() {
+        return Factory.getInstance(Command.class);
+    }
+
+    static public Command getInstance(Command command)
+            throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        return getFactory().createArtifact(command);
+    }
+
+    public Command(Command command)
+            throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+        super(command);
+    }
 
     public Command setupOptions() {
         options = new Options();

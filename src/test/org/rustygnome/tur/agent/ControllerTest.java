@@ -1,4 +1,4 @@
-package org.rustygnome.tur.artifact;
+package org.rustygnome.tur.agent;
 
 import org.apache.commons.cli.MissingArgumentException;
 import org.apache.commons.codec.DecoderException;
@@ -22,7 +22,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void creatingAnInstance_ShouldReturnAnInstance()
+    public void creatingAnInstance_shouldReturnAnInstance()
             throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
 
         // when: getting an instance
@@ -33,7 +33,7 @@ public class ControllerTest {
     }
 
     @Test
-    public void getInstance_ShouldUseTheFactory()
+    public void getInstance_shouldUseTheFactory()
             throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 
         // given: a mocked factory
@@ -43,14 +43,17 @@ public class ControllerTest {
         Factory.setInstance(Controller.class, mockedFactory);
 
         // when: getInstance() is called
-        Controller controller = Controller.getFactory().createArtifact(mock(Command.class));
+        Controller controller = Controller.getInstance(mock(Command.class));
 
-        // then: the returned artifact should be the one created by the mocked factory
+        // then: the factories createArtefact method should get called
+        verify(mockedFactory, times(1)).createArtifact(any(Command.class));
+
+        // and: the returned artifact should be the one created by the mocked factory
         assertEquals(mockedController, controller);
     }
 
     @Test
-    public void run_ShouldUseAllArtifactsByTheirMainPurpose()
+    public void run_shouldUseAllArtifactsByTheirMainPurpose()
             throws InstantiationException, IllegalAccessException, IOException, DecoderException, NoSuchMethodException, InvocationTargetException, MissingArgumentException {
 
         // given: some mocked artifacts

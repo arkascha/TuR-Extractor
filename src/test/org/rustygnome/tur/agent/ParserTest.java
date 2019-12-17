@@ -1,4 +1,4 @@
-package org.rustygnome.tur.artifact;
+package org.rustygnome.tur.agent;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,8 +11,8 @@ import java.lang.reflect.InvocationTargetException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
 
 public class ParserTest {
 
@@ -33,7 +33,7 @@ public class ParserTest {
     }
 
     @Test
-    public void getInstance_ShouldUseTheFactory()
+    public void getInstance_shouldUseTheFactory()
             throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
 
         // given: a mocked factory
@@ -43,14 +43,17 @@ public class ParserTest {
         Factory.setInstance(Parser.class, mockedFactory);
 
         // when: getInstance() is called
-        Parser parser = Parser.getFactory().createArtifact(mock(Command.class));
+        Parser parser = Parser.getInstance(mock(Command.class));
 
-        // then: the returned artifact should be the one created by the mocked factory
+        // then: the factories createArtefact method should get called
+        verify(mockedFactory, times(1)).createArtifact(any(Command.class));
+
+        // and: the returned artifact should be the one created by the mocked factory
         assertEquals(mockedParser, parser);
     }
 
     @Test
-    public void extract_ShouldThrowAnExceptionWithoutMessageToExtractFrom()
+    public void extract_shouldThrowAnExceptionWithoutMessageToExtractFrom()
             throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
 
         // and: the parser
@@ -64,7 +67,7 @@ public class ParserTest {
     }
 
     @Test
-    public void extract_ShouldExtractValuesAsExpected()
+    public void extract_shouldExtractValuesAsExpected()
             throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
 
         // given: a message as expected
@@ -89,7 +92,7 @@ public class ParserTest {
     }
 
     @Test
-    public void extract_ShouldThroughAnExceptionIfMessageStructureDoesNotMatch()
+    public void extract_shouldThroughAnExceptionIfMessageStructureDoesNotMatch()
             throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
 
         // given: a message with unexpected structure
@@ -97,7 +100,7 @@ public class ParserTest {
                 "\n Name, Beruf: Martin, Clown " +
                 "\nFax-Nummer: 08/15 " +
                 "\nHobbies\\s+\\.+: Warten " +
-                "\nDatum/Uhrzeit: übergestern \n";
+                "\nDatum/Uhrzeit: vorgestern \n";
 
         // and: the parser
         Parser parser = Parser.getFactory().createArtifact(mock(Command.class));
@@ -110,7 +113,7 @@ public class ParserTest {
     }
 
     @Test
-    public void extract_ShouldFormatDatesAsExpected()
+    public void extract_shouldFormatDatesAsExpected()
             throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
 
         // given: a message as expected
@@ -132,7 +135,7 @@ public class ParserTest {
     }
 
     @Test
-    public void extract_ShouldPreserveDatesIfInvalid()
+    public void extract_shouldPreserveDatesIfInvalid()
             throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
 
         // given: a message as expected

@@ -1,19 +1,17 @@
-package org.rustygnome.tur.artifact;
+package org.rustygnome.tur.agent;
 
 import org.apache.commons.cli.MissingArgumentException;
 import org.apache.commons.codec.DecoderException;
 import org.rustygnome.tur.Command;
 import org.rustygnome.tur.domain.Values;
+import org.rustygnome.tur.factory.Factored;
 import org.rustygnome.tur.factory.Factory;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 
 public class Controller
-        extends Artifact {
+        extends Factored {
 
     private Logger logger;
     private Parser parser;
@@ -22,6 +20,11 @@ public class Controller
 
     static public Factory<Controller> getFactory() {
         return Factory.getInstance(Controller.class);
+    }
+
+    static public Controller getInstance(Command command)
+            throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        return getFactory().createArtifact(command);
     }
 
     public Controller(Command command)
@@ -37,13 +40,13 @@ public class Controller
     public void run()
             throws IOException, DecoderException, MissingArgumentException {
 
-        String message = reader.read(setupInput());
+        String message = reader.read(setupInputStream());
         Values values = parser.parse(message);
         boolean exported = writer.write(values);
         logger.log(exported, values);
     }
 
-    private InputStreamReader setupInput()
+    private InputStream setupInputStream()
             throws FileNotFoundException {
 
         if (command.hasOption("input")) {
@@ -51,9 +54,9 @@ public class Controller
             String inputOptionValue = command.getOptionValue("input", null);
             if (inputOptionValue.equals("-")) {
                 System.err.println("Reading from stdin...");
-                return new InputStreamReader(new FileInputStream(inputOptionValue));
+                return System.in;
             }
-            return new InputStreamReader(System.in);
+            return new FileInputStream(inputOptionValue);
         }
 
         return null;

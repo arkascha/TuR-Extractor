@@ -47,7 +47,7 @@ public class Values {
             Values.Entry entry = iterator.next();
             stringBuilder.append(
                     String.format(
-                            "%s: %s",
+                            "| %s: %s",
                             entry.getKey().getTitle(),
                             entry.getValue()));
             if (iterator.hasNext()) {

@@ -1,7 +1,7 @@
 package org.rustygnome.tur;
 
-import org.rustygnome.tur.artifact.Controller;
-import org.rustygnome.tur.artifact.Logger;
+import org.rustygnome.tur.agent.Controller;
+import org.rustygnome.tur.agent.Logger;
 
 public class Application {
 
@@ -11,7 +11,9 @@ public class Application {
     static public void main(String[] args)
             throws Exception {
 
-        Command command = new Command()
+        Command command = Command
+                .getFactory()
+                .createArtifact(null)
                 .setupOptions()
                 .processArgs(args);
 
