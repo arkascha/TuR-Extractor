@@ -116,9 +116,12 @@ public class CommandTest {
     }
 
     enum ImplementedOption {
+        ACTION('a', "action", false),
+        ECHO('e', "echo", false),
         INPUT('i', "input", true),
         OUTPUT('o', "output", true),
         SHEET('s', "sheet", true),
+        TIME('t', "time", false),
         VERSION('v', "version", false);
 
         public char optionChar;

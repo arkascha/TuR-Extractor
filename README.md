@@ -23,10 +23,13 @@ Those messages can be fed as a sequence in one of theses ways
 `java -jar /path/to/TuR-Extractor <options>`
 
 `<options>`: 
+* `-a` | `--action`: (optional) output the performed action
+* `-e` | `--echo`: (optional) output the processed values
 * `-i <path>` | `--input=<path>`: (optional) a local file system path to the input message file, "-" selects STDIN
 * `-o <path>` | `--output=<path>`: (optional) a local file system path to the target spreadsheet document
 * `-s <name>` | `--sheet=<name>`: (optional, defaults to "Contacts") the title of the target document sheet 
-* `-v` | `--version`: (optional) outputs the utilities name and version number
+* `-t` | `--time`: (optional) output the time of action
+* `-v` | `--version`: (optional) output the utilities name and version number
 
 `<path>`: a local file system path (e.g. /var/spool/messages/inbound)
 

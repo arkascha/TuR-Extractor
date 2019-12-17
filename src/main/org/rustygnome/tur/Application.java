@@ -5,15 +5,14 @@ import org.rustygnome.tur.agent.Logger;
 
 public class Application {
 
-    static final String APPLICATION_NAME = "TuR-Extractor";
-    static final String APPLICATION_VERSION = "0.0.6";
+    static final public String APPLICATION_NAME = "TuR-Extractor";
+    static final public String APPLICATION_VERSION = "0.0.6";
 
     static public void main(String[] args)
             throws Exception {
 
         Command command = Command
-                .getFactory()
-                .createArtifact(null)
+                .getInstance(null)
                 .setupOptions()
                 .processArgs(args);
 
@@ -29,7 +28,9 @@ public class Application {
             Controller controller = Controller.getFactory().createArtifact(command);
             controller.run();
         } catch(Exception e) {
-            Logger.getFactory().createArtifact(command).log("FAILURE");
+            if (command.hasOption("action")) {
+                Logger.getFactory().createArtifact(command).log("FAILURE");
+            }
             throw e;
         }
     }

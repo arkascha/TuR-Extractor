@@ -33,9 +33,8 @@ public class Reader
             throws IOException, DecoderException {
 
         if (inputStream != null) {
-            InputStreamReader inputReader = new InputStreamReader(inputStream);
             CharBuffer inputBuffer = CharBuffer.allocate(10000);
-            inputReader.read(inputBuffer);
+            new InputStreamReader(inputStream).read(inputBuffer);
             inputBuffer.flip();
 //            return decodeInput(inputBuffer.toString());
             return inputBuffer.toString();

@@ -31,21 +31,33 @@ public class Command
     public Command setupOptions() {
         options = new Options();
 
-        Option input = new Option("i", "input", true, "input file path");
-        input.setRequired(false);
-        options.addOption(input);
+        Option actionOption = new Option("a", "action", false, "output performed action");
+        actionOption.setRequired(false);
+        options.addOption(actionOption);
 
-        Option output = new Option("o", "output", true, "output file path");
-        output.setRequired(false);
-        options.addOption(output);
+        Option echoOption = new Option("e", "echo", false, "echo exported values");
+        echoOption.setRequired(false);
+        options.addOption(echoOption);
 
-        Option sheet = new Option("s", "sheet", true, "document sheet name");
-        sheet.setRequired(false);
-        options.addOption(sheet);
+        Option inputOption = new Option("i", "input", true, "input file path");
+        inputOption.setRequired(false);
+        options.addOption(inputOption);
 
-        Option version = new Option("v", "version", false, "version number");
-        version.setRequired(false);
-        options.addOption(version);
+        Option outputOption = new Option("o", "output", true, "output file path");
+        outputOption.setRequired(false);
+        options.addOption(outputOption);
+
+        Option sheetOption = new Option("s", "sheet", true, "document sheet name");
+        sheetOption.setRequired(false);
+        options.addOption(sheetOption);
+
+        Option timeOption = new Option("t", "time", false, "output time of action");
+        timeOption.setRequired(false);
+        options.addOption(timeOption);
+
+        Option versionOption = new Option("v", "version", false, "version number");
+        versionOption.setRequired(false);
+        options.addOption(versionOption);
 
         return this;
     }

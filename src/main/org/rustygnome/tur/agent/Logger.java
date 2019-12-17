@@ -7,11 +7,15 @@ import org.rustygnome.tur.factory.Factored;
 import org.rustygnome.tur.factory.Factory;
 
 import java.lang.reflect.InvocationTargetException;
+import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
 
 public class Logger
         extends Factored {
+
+    private Clock clock;
 
     static public Factory<Logger> getFactory() {
         return Factory.getInstance(Logger.class);
@@ -24,20 +28,37 @@ public class Logger
 
     public Logger(Command command) {
         super(command);
+        this.clock = Clock.system(ZoneId.systemDefault());
+    }
+
+    public Logger setClock(Clock clock) {
+        this.clock = clock;
+        return this;
+    }
+
+    public String currentDateTime() {
+        return LocalDate.now(clock) + " " + LocalTime.now(clock);
     }
 
     public void log(@NotNull String message) {
-        System.out.println(String.format(
-                "[%s %s] %s\n",
-                LocalDate.now(),
-                LocalTime.now(),
-                message));
+        StringBuilder stringBuilder = new StringBuilder();
+        if (command.hasOption("time")) {
+            stringBuilder.append("[").append(currentDateTime()).append("] ");
+        }
+        stringBuilder.append(message).append(" \n");
+        System.out.println(stringBuilder.toString().trim());
     }
 
     public void log(boolean exported, Values values) {
-        log(String.format(
-                "%s: \n%s",
-                exported ? "EXPORTED" : "IGNORED",
-                values != null ? values.toString() : "-/-"));
+        StringBuilder stringBuilder = new StringBuilder();
+        if (command.hasOption("action")) {
+            stringBuilder.append(exported ? "<EXPORTED>" : "<IGNORED>").append(" \n");
+        } else {
+            stringBuilder.append(" \n");
+        }
+        if (command.hasOption("echo")) {
+            stringBuilder.append(values != null ? values.toString() : "-/-").append(" \n");
+        }
+        log(stringBuilder.toString());
     }
 }

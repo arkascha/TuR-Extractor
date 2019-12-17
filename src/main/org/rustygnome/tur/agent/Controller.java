@@ -40,20 +40,19 @@ public class Controller
     public void run()
             throws IOException, DecoderException, MissingArgumentException {
 
-        String message = reader.read(setupInputStream());
+        String message = reader.read(setupInput());
         Values values = parser.parse(message);
         boolean exported = writer.write(values);
         logger.log(exported, values);
     }
 
-    private InputStream setupInputStream()
+    private InputStream setupInput()
             throws FileNotFoundException {
 
         if (command.hasOption("input")) {
 
             String inputOptionValue = command.getOptionValue("input", null);
             if (inputOptionValue.equals("-")) {
-                System.err.println("Reading from stdin...");
                 return System.in;
             }
             return new FileInputStream(inputOptionValue);
