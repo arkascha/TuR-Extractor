@@ -4,17 +4,23 @@ import org.apache.commons.cli.MissingArgumentException;
 import org.apache.commons.codec.DecoderException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.rustygnome.tur.Application;
 import org.rustygnome.tur.Command;
 import org.rustygnome.tur.domain.Values;
 import org.rustygnome.tur.factory.Factory;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class ControllerTest {
+
+    private ByteArrayOutputStream stdErr;
 
     @BeforeEach
     public void clearFactory() {
@@ -96,5 +102,27 @@ public class ControllerTest {
         verify(mockedParser, times(1)).parse(anyString());
         verify(mockedReader, times(1)).read(any());
         verify(mockedWriter, times(1)).write(any());
+    }
+
+    @Test
+    public void cliArgumentVersion_shouldOutputProcessedValues()
+            throws UnsupportedEncodingException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+
+        // given: a captured StdErr output
+        ByteArrayOutputStream stdErr = new ByteArrayOutputStream();
+        System.setErr(new PrintStream(stdErr, true, "UTF-8"));
+        // and: a Command that specifies the "version" option
+        Command command = mock(Command.class);
+        when(command.hasOption(eq("version"))).thenReturn(true);
+
+        // when: a Controller ist instantiated
+        Controller.getInstance(command);
+
+        // then: the output should contain the package information
+        String expectedInformation = String.format(
+                "%s (version %s)",
+                Application.packageName,
+                Application.packageVersion);
+        assertEquals(expectedInformation, stdErr.toString().trim());
     }
 }

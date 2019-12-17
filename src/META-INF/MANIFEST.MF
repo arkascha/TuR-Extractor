@@ -1,3 +1,11 @@
 Manifest-Version: 1.0
-Main-Class: org.rustygnome.tur.Application
+Built-By: arkascha
 
+Name: TuR-Extractor
+Implementation-URL: https://github.com/arkascha/TuR-Extractor
+Implementation-Title: TuR-Extractor
+Implementation-Vendor: Rusty Gnome
+Implementation-Version: 0.0.7
+
+Main-Class: org.rustygnome.tur.Application
+Sealed: true

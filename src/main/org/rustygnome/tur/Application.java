@@ -5,8 +5,8 @@ import org.rustygnome.tur.agent.Logger;
 
 public class Application {
 
-    static final public String APPLICATION_NAME = "TuR-Extractor";
-    static final public String APPLICATION_VERSION = "0.0.6";
+    static public String packageName = "???";
+    static public String packageVersion = "???";
 
     static public void main(String[] args)
             throws Exception {
@@ -16,13 +16,7 @@ public class Application {
                 .setupOptions()
                 .processArgs(args);
 
-        if (command.hasOption("version")) {
-            System.err.println(String.format(
-                    "%s (version %s)",
-                    APPLICATION_NAME,
-                    APPLICATION_VERSION
-            ));
-        }
+        readPackageInformation();
 
         try {
             Controller controller = Controller.getFactory().createArtifact(command);
@@ -32,6 +26,14 @@ public class Application {
                 Logger.getFactory().createArtifact(command).log("FAILURE");
             }
             throw e;
+        }
+    }
+
+    static void readPackageInformation() {
+        Package applicationPackage = Application.class.getPackage();
+        if (applicationPackage != null) {
+            packageName = applicationPackage.getName();
+            packageVersion = applicationPackage.getImplementationTitle();
         }
     }
 }

@@ -2,6 +2,7 @@ package org.rustygnome.tur.agent;
 
 import org.apache.commons.cli.MissingArgumentException;
 import org.apache.commons.codec.DecoderException;
+import org.rustygnome.tur.Application;
 import org.rustygnome.tur.Command;
 import org.rustygnome.tur.domain.Values;
 import org.rustygnome.tur.factory.Factored;
@@ -35,6 +36,10 @@ public class Controller
         parser = Parser.getFactory().createArtifact(command);
         reader = Reader.getFactory().createArtifact(command);
         writer = Writer.getFactory().createArtifact(command);
+
+        if (command.hasOption("version")) {
+            outputPackageInformation();
+        }
     }
 
     public void run()
@@ -59,5 +64,12 @@ public class Controller
         }
 
         return null;
+    }
+
+    void outputPackageInformation() {
+        System.err.println(String.format(
+                "%s (version %s)",
+                Application.packageName,
+                Application.packageVersion));
     }
 }
