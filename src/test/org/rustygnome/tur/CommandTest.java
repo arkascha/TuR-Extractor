@@ -4,29 +4,33 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.rustygnome.tur.factory.Factored;
 import org.rustygnome.tur.factory.Factory;
 
-import java.lang.reflect.InvocationTargetException;
-
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 public class CommandTest {
+
+    static public Command aCommand(String commandLine) {
+        String[] args = commandLine.split(" ");
+        Command command = Command.getInstance().setupOptions().processArgs(args);
+        Factored.setInstance(Command.class, command);
+        return command;
+    }
 
     @BeforeEach
     public void clearFactory() {
         Factory.clearInstances();
     }
 
-    private Command aCommand()
-            throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        return Command.getFactory().createArtifact(null).setupOptions();
+    @BeforeEach
+    public void clearFactored() {
+        Factored.clearInstances();
     }
 
     @Test
-    public void creatingAnInstance_shouldReturnAnInstance()
-            throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+    public void creatingAnInstance_shouldReturnAnInstance() {
 
         // when: getting an instance
         Command instance = Command.getInstance();
@@ -36,20 +40,20 @@ public class CommandTest {
     }
 
     @Test
-    public void getInstance_shouldUseTheFactory()
-            throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+    public void getInstance_shouldUseTheFactory() {
 
-        // given: a mocked factory
+        // given: a mocked Command
         Command mockedCommand = mock(Command.class);
+        // and: a mocked Factory
         Factory<Command> mockedFactory = mock(Factory.class);
-        when(mockedFactory.createArtifact(eq(null))).thenReturn(mockedCommand);
+        when(mockedFactory.createArtifact()).thenReturn(mockedCommand);
         Factory.setInstance(Command.class, mockedFactory);
 
         // when: getInstance() is called
         Command command = Command.getInstance();
 
         // then: the factories createArtefact method should get called
-        verify(mockedFactory, times(1)).createArtifact(eq(null));
+        verify(mockedFactory, times(1)).createArtifact();
 
         // and: the returned artifact should be the one created by the mocked factory
         assertEquals(mockedCommand, command);
@@ -57,11 +61,10 @@ public class CommandTest {
 
     @ParameterizedTest
     @EnumSource(ImplementedOption.class)
-    public void anyCliArgumentValueSpecifiedPerString_shouldResultInOptionValues(ImplementedOption option)
-            throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+    public void anyCliArgumentValueSpecifiedPerString_shouldResultInOptionValues(ImplementedOption option) {
 
         // given: a command object
-        Command command = aCommand();
+        Command command = aCommand("");
 
         // when: CLI args without input option are processed
         String cliString = String.format("--%s %s", option.optionString, "someArbitraryValue");
@@ -78,11 +81,10 @@ public class CommandTest {
 
     @ParameterizedTest
     @EnumSource(ImplementedOption.class)
-    public void anyCliArgumentValueSpecifiedPerChar_shouldResultInOptionValues(ImplementedOption option)
-            throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+    public void anyCliArgumentValueSpecifiedPerChar_shouldResultInOptionValues(ImplementedOption option) {
 
         // given: a command object
-        Command command = aCommand();
+        Command command = aCommand("");
 
         // when: CLI args without input option are processed
         final String cliString = String.format("--%s %s", option.optionChar, "someArbitraryValue");
@@ -99,11 +101,10 @@ public class CommandTest {
 
     @ParameterizedTest
     @EnumSource(ImplementedOption.class)
-    public void missingCliArguments_shouldResultInMissingOptionValues(ImplementedOption option)
-            throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+    public void missingCliArguments_shouldResultInMissingOptionValues(ImplementedOption option) {
 
         // given: a command object
-        Command command = aCommand();
+        Command command = aCommand("");
 
         // when: those args are processed
         String[] cliArgs = new String[]{"hallo ---s du da"};

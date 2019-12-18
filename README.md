@@ -25,6 +25,7 @@ Those messages can be fed as a sequence in one of theses ways
 `<options>`: 
 * `-a` | `--action`: (optional) output the performed action
 * `-e` | `--echo`: (optional) output the processed values
+* `-d` | `--debug`: (optional) log debugging info
 * `-i <path>` | `--input=<path>`: (optional) a local file system path to the input message file, "-" selects STDIN
 * `-o <path>` | `--output=<path>`: (optional) a local file system path to the target spreadsheet document
 * `-s <name>` | `--sheet=<name>`: (optional, defaults to "Contacts") the title of the target document sheet 

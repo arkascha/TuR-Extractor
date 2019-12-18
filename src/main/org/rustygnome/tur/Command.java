@@ -1,31 +1,41 @@
 package org.rustygnome.tur;
 
 import org.apache.commons.cli.*;
+import org.rustygnome.tur.agent.Logger;
 import org.rustygnome.tur.factory.Factored;
-import org.rustygnome.tur.factory.Factory;
-
-import java.lang.reflect.InvocationTargetException;
 
 public class Command
         extends Factored {
 
+    static final String TAG = Command.class.getSimpleName();
+
     static private final String COMMAND_NAME = "tur-extract";
 
     private Options options;
-    private CommandLine cmd;
+    private CommandLine commandLine;
 
-    static public Factory<Command> getFactory() {
-        return Factory.getInstance(Command.class);
+    static public Command getInstance() {
+        return (Command) Factored.getInstance(Command.class);
     }
 
-    static public Command getInstance()
-            throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        return getFactory().createArtifact(null);
+    static public boolean hasOption(String optionName)  {
+        return getInstance().getCommandLine().hasOption(optionName);
     }
 
-    public Command(Command command)
-            throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
-        super(command);
+    static public String getOptionValue(String optionName)  {
+        return getInstance().getCommandLine().getOptionValue(optionName);
+    }
+
+    static public String getOptionValue(String optionName, String defaultValue)  {
+        return getInstance().getCommandLine().getOptionValue(optionName, defaultValue);
+    }
+
+    public Command() {
+        super();
+    }
+
+    public CommandLine getCommandLine() {
+        return commandLine;
     }
 
     public Command setupOptions() {
@@ -34,6 +44,10 @@ public class Command
         Option actionOption = new Option("a", "action", false, "output performed action");
         actionOption.setRequired(false);
         options.addOption(actionOption);
+
+        Option debugOption = new Option("d", "debug", false, "write debug output");
+        debugOption.setRequired(false);
+        options.addOption(debugOption);
 
         Option echoOption = new Option("e", "echo", false, "echo exported values");
         echoOption.setRequired(false);
@@ -67,26 +81,14 @@ public class Command
         HelpFormatter formatter = new HelpFormatter();
 
         try {
-            cmd = parser.parse(options, args);
+            commandLine = parser.parse(options, args);
         } catch (ParseException e) {
-            System.err.println(e.getMessage());
+            Logger.getInstance().logException(TAG, e);
             formatter.printHelp(COMMAND_NAME, options);
 
             System.exit(1);
         }
 
         return this;
-    }
-
-    public boolean hasOption(String optionName) {
-        return cmd.hasOption(optionName);
-    }
-
-    public String getOptionValue(String optionName) {
-        return cmd.getOptionValue(optionName);
-    }
-
-    public String getOptionValue(String optionName, String defaultValue) {
-        return cmd.getOptionValue(optionName, defaultValue);
     }
 }

@@ -1,76 +1,66 @@
 package org.rustygnome.tur.agent;
 
-import org.apache.commons.codec.DecoderException;
 import org.rustygnome.tur.Application;
 import org.rustygnome.tur.Command;
 import org.rustygnome.tur.domain.Values;
 import org.rustygnome.tur.factory.Factored;
-import org.rustygnome.tur.factory.Factory;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
 
 public class Controller
         extends Factored {
 
-    private Logger logger;
-    private Parser parser;
-    private Reader reader;
-    private Writer writer;
+    static final String TAG = Controller.class.getSimpleName();
 
-    static public Factory<Controller> getFactory() {
-        return Factory.getInstance(Controller.class);
+    static public Controller getInstance() {
+        return (Controller) Factored.getInstance(Controller.class);
     }
 
-    static public Controller getInstance(Command command)
-            throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        return getFactory().createArtifact(command);
-    }
+    public Controller() {
+        super();
 
-    public Controller(Command command)
-            throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
-        super(command);
-
-        logger = Logger.getFactory().createArtifact(command);
-        parser = Parser.getFactory().createArtifact(command);
-        reader = Reader.getFactory().createArtifact(command);
-        writer = Writer.getFactory().createArtifact(command);
-
-        if (command.hasOption("version")) {
+        if (Command.hasOption("version")) {
             outputPackageInformation();
         }
     }
 
-    public void run()
-            throws IOException, DecoderException {
+    public void run() {
+        Logger.getInstance().logDebug(TAG, "controller running");
 
-        String message = reader.read(setupInput());
-        Values values = parser.parse(message);
-        boolean exported = writer.write(values);
-        logger.log(exported, values);
+        String message = Reader.getInstance().read(setupInput());
+        Values values = Parser.getInstance().parse(message);
+        boolean exported = Writer.getInstance().write(values);
+        Logger.getInstance().logValues(exported, values);
+
+        Logger.getInstance().logDebug(TAG, "controller finished");
     }
 
-    private InputStream setupInput()
-            throws FileNotFoundException {
+    private InputStream setupInput() {
+        Logger.getInstance().logDebug(TAG, "setting up input");
 
-        if (command.hasOption("input")) {
+        if (Command.hasOption("input")) {
 
-            String inputOptionValue = command.getOptionValue("input", null);
+            String inputOptionValue = Command.getOptionValue("input", null);
             if (inputOptionValue.equals("-")) {
+                Logger.getInstance().logDebug(TAG, "reading from StdIn");
                 return System.in;
             }
-            return new FileInputStream(inputOptionValue);
+            Logger.getInstance().logDebug(TAG, "reading from file");
+            try {
+                return new FileInputStream(inputOptionValue);
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
         }
-
+        Logger.getInstance().logDebug(TAG, "not reading any input");
         return null;
     }
 
     void outputPackageInformation() {
-        System.err.println(String.format(
-                "%s (version %s)",
+        Logger.getInstance().logResult(String.format(
+                "version: %s (%s)",
                 Application.packageTitle,
                 Application.packageVersion));
     }

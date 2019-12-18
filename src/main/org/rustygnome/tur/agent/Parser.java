@@ -1,12 +1,9 @@
 package org.rustygnome.tur.agent;
 
-import org.rustygnome.tur.Command;
 import org.rustygnome.tur.domain.Key;
 import org.rustygnome.tur.domain.Values;
 import org.rustygnome.tur.factory.Factored;
-import org.rustygnome.tur.factory.Factory;
 
-import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -15,6 +12,8 @@ import java.util.regex.Pattern;
 
 public class Parser
         extends Factored {
+
+    static final String TAG = Parser.class.getSimpleName();
 
     private final String DATE_PATTERN = "yyyy-MM'= =2D'dd HH:mm:ss";
     private final String DATE_FORMAT = "dd.MM.yyyy HH:mm";
@@ -27,20 +26,16 @@ public class Parser
 
     private Values values = new Values();
 
-    static public Factory<Parser> getFactory() {
-        return Factory.getInstance(Parser.class);
+    static public Parser getInstance() {
+        return (Parser) Factored.getInstance(Parser.class);
     }
 
-    static public Parser getInstance(Command command)
-            throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        return getFactory().createArtifact(command);
-    }
-
-    public Parser(Command command) {
-        super(command);
+    public Parser() {
+        super();
     }
 
     public Values parse(String message) {
+        Logger.getInstance().logDebug(TAG, "parsing values from input");
 
         if (message != null) {
             final Pattern pattern = Pattern.compile(EXTRACTION_REGEX, Pattern.MULTILINE | Pattern.DOTALL);
@@ -50,11 +45,13 @@ public class Parser
                 values.put(Key.EMAIL, normalizeString(matcher.group(2)));
                 values.put(Key.INTERESTS, normalizeString(matcher.group(3)));
                 values.put(Key.DATETIME, normalizeDatetime(normalizeString(matcher.group(4))));
+                Logger.getInstance().logDebug(TAG, "parsed values from input");
                 return values;
             }
             throw new RuntimeException("Failed to parse message");
         }
 
+        Logger.getInstance().logDebug(TAG, "no values parsed from input");
         return null;
     }
 

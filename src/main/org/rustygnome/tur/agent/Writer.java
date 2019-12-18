@@ -8,70 +8,79 @@ import org.jetbrains.annotations.NotNull;
 import org.rustygnome.tur.Command;
 import org.rustygnome.tur.domain.Values;
 import org.rustygnome.tur.factory.Factored;
-import org.rustygnome.tur.factory.Factory;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.rmi.UnexpectedException;
 import java.util.Iterator;
 
 public class Writer
         extends Factored {
 
-    static public Factory<Writer> getFactory() {
-        return Factory.getInstance(Writer.class);
+    static final String TAG = Writer.class.getSimpleName();
+
+    static public Writer getInstance() {
+        return (Writer) Factored.getInstance(Writer.class);
     }
 
-    static public Writer getInstance(Command command)
-            throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        return getFactory().createArtifact(command);
+    public Writer() {
+        super();
     }
 
-    public Writer(Command command) {
-        super(command);
-    }
-
-    public boolean write(Values values)
-            throws IOException {
+    public boolean write(Values values) {
+        Logger.getInstance().logDebug(TAG, "writing values");
 
         if (values != null) {
-            if (command.hasOption("output")) {
+            if (Command.hasOption("output")) {
                 return writeToXlsx(values);
             }
         }
         return false;
     }
 
-    private boolean writeToXlsx(@NotNull Values values)
-            throws IOException {
+    private boolean writeToXlsx(@NotNull Values values) {
+        Logger.getInstance().logDebug(TAG, "writing into spreadsheet document");
+
         boolean exported = false;
 
-        String outputPath = command.getOptionValue("output");
-        String sheetName = command.getOptionValue("sheet", "Kontakte");
+        String outputPath = Command.getOptionValue("output");
+        String sheetName = Command.getOptionValue("sheet", "Kontakte");
         XSSFWorkbook document = openDocument(outputPath, sheetName);
         XSSFSheet sheet = document.getSheet(sheetName);
 
         if (!rowExists(sheet, values)) {
             createRow(sheet, values);
             writeDocument(document, outputPath);
+            Logger.getInstance().logDebug(TAG, "wrote into spreadsheet document");
             exported = true;
         }
-        document.close();
+        try {
+            document.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
+        Logger.getInstance().logDebug(TAG, "values " + (exported ? "have" : "have not") + " been exported");
         return exported;
     }
 
-    private XSSFWorkbook openDocument(@NotNull String outputPath, String sheetName)
-            throws IOException {
+    private XSSFWorkbook openDocument(@NotNull String outputPath, String sheetName) {
+        Logger.getInstance().logDebug(TAG, "opening spreadsheet document");
+
         XSSFWorkbook document;
 
         if ((new File(outputPath)).exists()) {
-            FileInputStream file = new FileInputStream(new File(outputPath));
-            document = new XSSFWorkbook(file);
-            file.close();
+            FileInputStream file;
+
+            try {
+                file = new FileInputStream(new File(outputPath));
+                document = new XSSFWorkbook(file);
+                file.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
             if (document.getSheet(sheetName) == null) {
                 createSheet(document, sheetName);
             }
@@ -80,10 +89,13 @@ public class Writer
             createSheet(document, sheetName);
         }
 
+        Logger.getInstance().logDebug(TAG, "opened spreadsheet document");
         return document;
     }
 
     private void createSheet(XSSFWorkbook document, String sheetName) {
+        Logger.getInstance().logDebug(TAG, "creating new sheet in spreadsheet document");
+
         XSSFSheet sheet = document.createSheet(sheetName);
         Row row = sheet.createRow(0);
         for (Values.Entry entry : Values.getTitles().entrySet()) {
@@ -92,25 +104,26 @@ public class Writer
     }
 
     private void createRow(@NotNull XSSFSheet sheet, @NotNull Values values) {
+        Logger.getInstance().logDebug(TAG, "creating new row in spreadsheet document");
+
         Row row = sheet.createRow(sheet.getLastRowNum() + 1);
         for (Values.Entry entry : values.entrySet()) {
             row.createCell(entry.getKey().getIndex()).setCellValue(entry.getValue());
         }
     }
 
-    private boolean rowExists(@NotNull XSSFSheet sheet, @NotNull Values values)
-            throws UnexpectedException {
+    private boolean rowExists(@NotNull XSSFSheet sheet, @NotNull Values values) {
 
         // check for the title row
         Iterator<Row> rowIterator = sheet.rowIterator();
         if ( ! rowIterator.hasNext()) {
-            throw new UnexpectedException("Sheet does not have a title row");
+            throw new RuntimeException(new UnexpectedException("Sheet does not have a title row"));
         }
 
         // does the first row hold the column titles
         Row row = rowIterator.next();
         if ( ! rowHoldsValues(row, Values.getTitles())) {
-            throw new UnexpectedException("Sheet does not hold the expected columns");
+            throw new RuntimeException(new UnexpectedException("Sheet does not hold the expected columns"));
         }
 
         while (rowIterator.hasNext()) {
@@ -134,11 +147,20 @@ public class Writer
         return true;
     }
 
-    private void writeDocument(@NotNull XSSFWorkbook document, @NotNull String filePath)
-            throws IOException {
-        FileOutputStream stream = new FileOutputStream(new File(filePath), true);
-        document.write(stream);
-        stream.flush();
-        stream.close();
+    private void writeDocument(@NotNull XSSFWorkbook document, @NotNull String filePath) {
+        FileOutputStream stream = null;
+
+        try {
+            Logger.getInstance().logDebug(TAG, "writing spreadsheet document");
+
+            stream = new FileOutputStream(new File(filePath), true);
+            document.write(stream);
+            stream.flush();
+            stream.close();
+
+            Logger.getInstance().logDebug(TAG, "wrote spreadsheet document");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

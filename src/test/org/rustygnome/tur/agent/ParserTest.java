@@ -2,15 +2,13 @@ package org.rustygnome.tur.agent;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.rustygnome.tur.Command;
+import org.rustygnome.tur.CommandTest;
 import org.rustygnome.tur.domain.Key;
 import org.rustygnome.tur.domain.Values;
+import org.rustygnome.tur.factory.Factored;
 import org.rustygnome.tur.factory.Factory;
 
-import java.lang.reflect.InvocationTargetException;
-
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class ParserTest {
@@ -20,43 +18,47 @@ public class ParserTest {
         Factory.clearInstances();
     }
 
+    @BeforeEach
+    public void clearFactored() {
+        Factored.clearInstances();
+    }
+
     @Test
-    public void creatingAnInstance_ShouldReturnAnInstance()
-            throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+    public void creatingAnInstance_ShouldReturnAnInstance() {
 
         // when: getting an instance
-        Parser instance = Parser.getInstance(mock(Command.class));
+        Parser instance = Parser.getInstance();
 
         // then: it should be an instance
         assertEquals(Parser.class, instance.getClass());
     }
 
     @Test
-    public void getInstance_shouldUseTheFactory()
-            throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+    public void getInstance_shouldUseTheFactory() {
 
         // given: a mocked factory
         Parser mockedParser = mock(Parser.class);
         Factory<Parser> mockedFactory = mock(Factory.class);
-        when(mockedFactory.createArtifact(any(Command.class))).thenReturn(mockedParser);
+        when(mockedFactory.createArtifact()).thenReturn(mockedParser);
         Factory.setInstance(Parser.class, mockedFactory);
 
         // when: getInstance() is called
-        Parser parser = Parser.getInstance(mock(Command.class));
+        Parser parser = Parser.getInstance();
 
         // then: the factories createArtefact method should get called
-        verify(mockedFactory, times(1)).createArtifact(any(Command.class));
+        verify(mockedFactory, times(1)).createArtifact();
 
         // and: the returned artifact should be the one created by the mocked factory
         assertEquals(mockedParser, parser);
     }
 
     @Test
-    public void extract_shouldThrowAnExceptionWithoutMessageToExtractFrom()
-            throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+    public void extract_shouldThrowAnExceptionWithoutMessageToExtractFrom() {
 
+        // given: a Command that specifies the "version" option
+        CommandTest.aCommand("");
         // and: the parser
-        Parser parser = Parser.getFactory().createArtifact(mock(Command.class));
+        Parser parser = Parser.getInstance();
 
         // when: the extraction is performed
         Values values = parser.parse(null);
@@ -66,8 +68,7 @@ public class ParserTest {
     }
 
     @Test
-    public void extract_shouldExtractValuesAsExpected()
-            throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+    public void extract_shouldExtractValuesAsExpected() {
 
         // given: a message as expected
         final String message =
@@ -76,9 +77,10 @@ public class ParserTest {
                 "\nMeine Hauptinteressen sind ....: Freunde am Miteinander! " +
                 "\nNutzer hat die Datenschutzerkl=C3=A4rung akzeptiert. " +
                 "\nDatum/Uhrzeit: 1999-09-19 09:19:29 CET \n";
-
+        // and: a Command that specifies the "version" option
+        CommandTest.aCommand("");
         // and: the parser
-        Parser parser = Parser.getFactory().createArtifact(mock(Command.class));
+        Parser parser = Parser.getInstance();
 
         // when: the extraction is performed
         Values values = parser.parse(message);
@@ -91,8 +93,7 @@ public class ParserTest {
     }
 
     @Test
-    public void extract_shouldThroughAnExceptionIfMessageStructureDoesNotMatch()
-            throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+    public void extract_shouldThroughAnExceptionIfMessageStructureDoesNotMatch() {
 
         // given: a message with unexpected structure
         final String message =
@@ -100,9 +101,10 @@ public class ParserTest {
                 "\nFax-Nummer: 08/15 " +
                 "\nHobbies\\s+\\.+: Warten " +
                 "\nDatum/Uhrzeit: vorgestern \n";
-
+        // and: a Command that specifies the "version" option
+        CommandTest.aCommand("");
         // and: the parser
-        Parser parser = Parser.getFactory().createArtifact(mock(Command.class));
+        Parser parser = Parser.getInstance();
 
         // when: the extraction is performed
         // then: an exception should get raised
@@ -112,8 +114,7 @@ public class ParserTest {
     }
 
     @Test
-    public void extract_shouldFormatDatesAsExpected()
-            throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+    public void extract_shouldFormatDatesAsExpected() {
 
         // given: a message as expected
         final String message =
@@ -122,9 +123,10 @@ public class ParserTest {
                         "\nMeine Hauptinteressen sind ....: INTEREST " +
                         "\nNutzer hat die Datenschutzerkl=C3=A4rung akzeptiert. " +
                         "\nDatum/Uhrzeit: 1999-09= =2D19 09:19:29 CET \n";
-
+        // and: a Command that specifies the "version" option
+        CommandTest.aCommand("");
         // and: the parser
-        Parser parser = Parser.getFactory().createArtifact(mock(Command.class));
+        Parser parser = Parser.getInstance();
 
         // when: the extraction is performed
         Values values = parser.parse(message);
@@ -134,8 +136,7 @@ public class ParserTest {
     }
 
     @Test
-    public void extract_shouldPreserveDatesIfInvalid()
-            throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+    public void extract_shouldPreserveDatesIfInvalid() {
 
         // given: a message as expected
         final String message =
@@ -144,9 +145,10 @@ public class ParserTest {
                         "\nMeine Hauptinteressen sind ....: INTEREST " +
                         "\nNutzer hat die Datenschutzerkl=C3=A4rung akzeptiert. " +
                         "\nDatum/Uhrzeit: 1999-A 16 GORKY CET \n";
-
+        // and: a Command that specifies the "version" option
+        CommandTest.aCommand("");
         // and: the parser
-        Parser parser = Parser.getFactory().createArtifact(mock(Command.class));
+        Parser parser = Parser.getInstance();
 
         // when: the extraction is performed
         Values values = parser.parse(message);

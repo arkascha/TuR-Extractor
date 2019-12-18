@@ -1,19 +1,16 @@
 package org.rustygnome.tur.agent;
 
-import org.apache.commons.codec.DecoderException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.rustygnome.tur.Command;
+import org.rustygnome.tur.CommandTest;
+import org.rustygnome.tur.factory.Factored;
 import org.rustygnome.tur.factory.Factory;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class ReaderTest {
@@ -23,47 +20,51 @@ public class ReaderTest {
         Factory.clearInstances();
     }
 
+    @BeforeEach
+    public void clearFactored() {
+        Factored.clearInstances();
+    }
+
     @Test
-    public void creatingAnInstance_shouldReturnAnInstance()
-            throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+    public void creatingAnInstance_shouldReturnAnInstance() {
 
         // when: getting an instance
-        Reader instance = Reader.getInstance(mock(Command.class));
+        Reader instance = Reader.getInstance();
 
         // then: it should be an instance
         assertEquals(Reader.class, instance.getClass());
     }
 
     @Test
-    public void getInstance_shouldUseTheFactory()
-            throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+    public void getInstance_shouldUseTheFactory() {
 
         // given: a mocked factory
         Reader mockedReader = mock(Reader.class);
         Factory<Reader> mockedFactory = mock(Factory.class);
-        when(mockedFactory.createArtifact(any(Command.class))).thenReturn(mockedReader);
+        when(mockedFactory.createArtifact()).thenReturn(mockedReader);
         Factory.setInstance(Reader.class, mockedFactory);
 
         // when: getInstance() is called
-        Reader reader = Reader.getInstance(mock(Command.class));
+        Reader reader = Reader.getInstance();
 
         // then: the factories createArtefact method should get called
-        verify(mockedFactory, times(1)).createArtifact(any(Command.class));
+        verify(mockedFactory, times(1)).createArtifact();
 
         // and: the returned artifact should be the one created by the mocked factory
         assertEquals(mockedReader, reader);
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"Das Pferd frisst keinen Kartoffelsalat.", ""})
-    public void readInput_shouldReadTheInput(String input)
-            throws IllegalAccessException, InstantiationException, IOException, DecoderException, NoSuchMethodException, InvocationTargetException {
+    @ValueSource(strings = {"Das Pferd frisst keinen Kartoffelsalat.", "one \ntwo \nthree", ""})
+    public void read_shouldReadTheInput(String input) {
 
-        // given: some input to read
+        // given: a Command that specifies the "version" option
+        CommandTest.aCommand("-i -");
+        // and: some input to read
         ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
 
         // and: a Reader reading that input
-        Reader reader = Reader.getFactory().createArtifact(mock(Command.class));
+        Reader reader = Factored.getFactory(Reader.class).createArtifact();
 
         // when: input is read
         String output = reader.read(inputStream);

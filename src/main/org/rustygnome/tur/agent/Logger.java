@@ -4,9 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.rustygnome.tur.Command;
 import org.rustygnome.tur.domain.Values;
 import org.rustygnome.tur.factory.Factored;
-import org.rustygnome.tur.factory.Factory;
 
-import java.lang.reflect.InvocationTargetException;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -15,19 +13,16 @@ import java.time.ZoneId;
 public class Logger
         extends Factored {
 
+    static final String TAG = Logger.class.getSimpleName();
+
     private Clock clock;
 
-    static public Factory<Logger> getFactory() {
-        return Factory.getInstance(Logger.class);
+    static public Logger getInstance() {
+        return (Logger) Factored.getInstance(Logger.class);
     }
 
-    static public Logger getInstance(Command command)
-            throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        return getFactory().createArtifact(command);
-    }
-
-    public Logger(Command command) {
-        super(command);
+    public Logger() {
+        super();
         this.clock = Clock.system(ZoneId.systemDefault());
     }
 
@@ -40,25 +35,47 @@ public class Logger
         return LocalDate.now(clock) + " " + LocalTime.now(clock);
     }
 
-    public void log(@NotNull String message) {
-        StringBuilder stringBuilder = new StringBuilder();
-        if (command.hasOption("time")) {
-            stringBuilder.append("[").append(currentDateTime()).append("] ");
+    public void log(@NotNull String message, boolean debug) {
+        if (debug && Command.hasOption("debug")) {
+            System.err.println(message);
+            System.err.flush();
+        } else {
+            System.out.println(message);
+            System.out.flush();
         }
-        stringBuilder.append(message).append(" \n");
-        System.out.println(stringBuilder.toString().trim());
     }
 
-    public void log(boolean exported, Values values) {
-        StringBuilder stringBuilder = new StringBuilder();
-        if (command.hasOption("action")) {
-            stringBuilder.append(exported ? "<EXPORTED>" : "<IGNORED>").append(" \n");
-        } else {
-            stringBuilder.append(" \n");
+    public void logDebug(String tag, String message) {
+        if (Command.hasOption("debug")) {
+            getInstance().log(tag + ": " + message, true);
         }
-        if (command.hasOption("echo")) {
-            stringBuilder.append(values != null ? values.toString() : "-/-").append(" \n");
-        }
-        log(stringBuilder.toString());
     }
+
+    public void logException(String tag, Exception e) {
+        Logger logger = getInstance();
+        logger.log(tag + ": exception caught: ", true);
+        logger.log(e.getMessage(), true);
+    }
+
+    public void logResult(String message) {
+        getInstance().logDebug(TAG, "logging result");
+        getInstance().log(message, false);
+    }
+
+    public void logValues(boolean exported, Values values) {
+        getInstance().logDebug(TAG, "logging values");
+
+        StringBuilder stringBuilder = new StringBuilder();
+        if (Command.hasOption("time")) {
+            stringBuilder.append("time: ").append(getInstance().currentDateTime()).append("\n");
+        }
+        if (Command.hasOption("action")) {
+            stringBuilder.append("action: ").append(exported ? "EXPORTED" : "IGNORED").append("\n");
+        }
+        if (Command.hasOption("echo")) {
+            stringBuilder.append("result:\n").append(values != null ? values.toString() : "-/-");
+        }
+        logResult(stringBuilder.toString());
+    }
+
 }

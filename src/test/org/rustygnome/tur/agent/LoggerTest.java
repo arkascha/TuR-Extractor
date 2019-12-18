@@ -7,11 +7,12 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.rustygnome.tur.Command;
 import org.rustygnome.tur.domain.Values;
+import org.rustygnome.tur.factory.Factored;
+import org.rustygnome.tur.factory.Factory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.InvocationTargetException;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -21,7 +22,6 @@ import java.util.Locale;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
 
 public class LoggerTest {
 
@@ -29,6 +29,16 @@ public class LoggerTest {
     static final private String FROZEN_TIME_2016 = "2016-09-02 16:09:02";
 
     private ByteArrayOutputStream stdOut;
+
+    @BeforeEach
+    public void clearFactory() {
+        Factory.clearInstances();
+    }
+
+    @BeforeEach
+    public void clearFactored() {
+        Factored.clearInstances();
+    }
 
     @BeforeEach
     private void setUpStdOut()
@@ -47,8 +57,7 @@ public class LoggerTest {
                 ZoneId.of(ZoneOffset.UTC.getId()));
     }
 
-    private Command aCliCommand(String[] args)
-            throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+    private Command aCliCommand(String[] args) {
         return Command
                 .getInstance()
                 .setupOptions()
@@ -56,11 +65,10 @@ public class LoggerTest {
     }
 
     @Test
-    public void setClock_shouldSetTheClock()
-            throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+    public void setClock_shouldSetTheClock() {
 
         // given: a Logger
-        Logger logger = Logger.getInstance(mock(Command.class));
+        Logger logger = Logger.getInstance();
 
         // when: some values are logged
         logger.setClock(aFrozenClock(FROZEN_TIME_2014));
@@ -75,18 +83,17 @@ public class LoggerTest {
 
     @ParameterizedTest
     @MethodSource("actionMapping")
-    public void cliArgumentAction_shouldOutputProcessedValues(boolean exported, String action)
-            throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    public void cliArgumentAction_shouldOutputProcessedValues(boolean exported, String action) {
 
         // given: a Command that specifies the "action" option
-        Command command = aCliCommand(new String[]{"--action"});
+        aCliCommand(new String[]{"--action"});
         // and: some parsed Values
         Values values = Values.getTitles();
         // and: a Logger with frozen time
-        Logger logger = Logger.getInstance(command).setClock(aFrozenClock(FROZEN_TIME_2014));
+        Logger logger = Logger.getInstance().setClock(aFrozenClock(FROZEN_TIME_2014));
 
         // when: those Values are logged
-        logger.log(exported, values);
+        logger.logValues(exported, values);
 
         // then: the output should contain those Values
         assertEquals(action, stdOut.toString().trim());
@@ -94,42 +101,40 @@ public class LoggerTest {
 
     static private Stream<Arguments> actionMapping() {
         return Stream.of(
-                Arguments.of(true, "<EXPORTED>"),
-                Arguments.of(false, "<IGNORED>")
+                Arguments.of(true, "action: EXPORTED"),
+                Arguments.of(false, "action: IGNORED")
         );
     }
 
     @Test
-    public void cliArgumentEcho_shouldOutputProcessedValues()
-            throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    public void cliArgumentEcho_shouldOutputProcessedValues() {
 
         // given: a Command that specifies the "echo" option
-        Command command = aCliCommand(new String[]{"--echo"});
+        aCliCommand(new String[]{"--echo"});
         // and: some parsed Values
         Values values = Values.getTitles();
         // and: a Logger with frozen time
-        Logger logger = Logger.getInstance(command).setClock(aFrozenClock(FROZEN_TIME_2014));
+        Logger logger = Logger.getInstance().setClock(aFrozenClock(FROZEN_TIME_2014));
 
         // when: those Values are logged
-        logger.log(true, values);
+        logger.logValues(true, values);
 
         // then: the output should contain those Values
-        assertEquals(values.toString(), stdOut.toString().trim());
+        assertEquals("result:\n" + values.toString(), stdOut.toString().trim());
     }
 
     @Test
-    public void cliArgumentTime_shouldOutputTimeOfAction()
-            throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    public void cliArgumentTime_shouldOutputTimeOfAction() {
 
         // given: a Command that specifies the "time" option
-        Command command = aCliCommand(new String[]{"--time"});
+        aCliCommand(new String[]{"--time"});
         // and: a Logger with frozen time
-        Logger logger = Logger.getInstance(command).setClock(aFrozenClock(FROZEN_TIME_2014));
+        Logger logger = Logger.getInstance().setClock(aFrozenClock(FROZEN_TIME_2014));
 
         // when: some Values are logged
-        logger.log(true, Values.getTitles());
+        logger.logValues(true, Values.getTitles());
 
         // then: the output should contain the expected time of action
-        assertEquals('[' + FROZEN_TIME_2014 + ']', stdOut.toString().trim());
+        assertEquals("time: " + FROZEN_TIME_2014, stdOut.toString().trim());
     }
 }

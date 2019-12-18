@@ -1,61 +1,53 @@
 package org.rustygnome.tur;
 
-import org.apache.commons.cli.MissingArgumentException;
-import org.apache.commons.codec.DecoderException;
-import org.jetbrains.annotations.Nullable;
 import org.rustygnome.tur.agent.Controller;
 import org.rustygnome.tur.agent.Logger;
 import org.rustygnome.tur.factory.Factored;
-import org.rustygnome.tur.factory.Factory;
-
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 
 public class Application
         extends Factored {
 
+    static final String TAG = Application.class.getSimpleName();
+
     static public String packageTitle = "???";
     static public String packageVersion = "???";
 
-    static public Factory<Application> getFactory() {
-        return Factory.getInstance(Application.class);
+    static public Application getInstance() {
+        return (Application) Factored.getInstance(Application.class);
     }
 
-    static public Application getInstance()
-            throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        return getFactory().createArtifact(null);
+    static public void main(String[] args) {
+        try {
+            getInstance().startUp(args);
+        } catch (Exception e) {
+            Logger.getInstance().logException(TAG, e);
+        }
     }
 
-    static public void main(String[] args)
-            throws Exception {
-        getInstance().startUp(args);
+    public Application() {
+        super();
     }
 
-    public Application(Command command) {
-        super(command);
+    void startUp(String[] args) {
+        Command.getInstance().setupOptions().processArgs(args);
+        Logger.getInstance().logDebug(TAG, "application starting up");
+
         readPackageInformation(Application.class.getPackage());
-    }
-
-    void startUp(String[] args)
-            throws Exception {
-
-        Command command = Command
-                .getInstance()
-                .setupOptions()
-                .processArgs(args);
 
         try {
-            Controller controller = Controller.getFactory().createArtifact(command);
+            Logger.getInstance().logDebug(TAG, "creating controller");
+            Controller controller = Factored.getFactory(Controller.class).createArtifact();
             controller.run();
         } catch(Exception e) {
-            if (command.hasOption("action")) {
-                Logger.getFactory().createArtifact(command).log("FAILURE");
+            if (Command.hasOption("action")) {
+                Logger.getInstance().logResult("FAILURE");
             }
-            throw e;
+            Logger.getInstance().logException(TAG, e);
         }
     }
 
     void readPackageInformation(Package applicationPackage) {
+        Logger.getInstance().logDebug(TAG, "reading package information");
         if (applicationPackage != null) {
             packageTitle = applicationPackage.getImplementationTitle();
             packageVersion = applicationPackage.getImplementationVersion();
