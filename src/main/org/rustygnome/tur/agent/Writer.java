@@ -106,7 +106,7 @@ public class Writer
     private void createRow(@NotNull XSSFSheet sheet, @NotNull Values values) {
         Logger.getInstance().logDebug(TAG, "creating new row in spreadsheet document");
 
-        Row row = sheet.createRow(sheet.getLastRowNum() + 1);
+        Row row = sheet.createRow(sheet.getPhysicalNumberOfRows());
         for (Values.Entry entry : values.entrySet()) {
             row.createCell(entry.getKey().getIndex()).setCellValue(entry.getValue());
         }
@@ -116,16 +116,17 @@ public class Writer
 
         // check for the title row
         Iterator<Row> rowIterator = sheet.rowIterator();
-        if ( ! rowIterator.hasNext()) {
-            throw new RuntimeException(new UnexpectedException("Sheet does not have a title row"));
+        if (rowIterator == null || ! rowIterator.hasNext()) {
+            throw new RuntimeException("Sheet does not have a rows");
         }
 
         // does the first row hold the column titles
         Row row = rowIterator.next();
         if ( ! rowHoldsValues(row, Values.getTitles())) {
-            throw new RuntimeException(new UnexpectedException("Sheet does not hold the expected columns"));
+            throw new RuntimeException("Sheet does not hold the expected columns");
         }
 
+        // check all other rows for a match of _all_ cell values
         while (rowIterator.hasNext()) {
             row = rowIterator.next();
             if (rowHoldsValues(row, values)) {
@@ -137,9 +138,9 @@ public class Writer
     }
 
     private boolean rowHoldsValues(@NotNull Row row, @NotNull Values values) {
-        Iterator<Values.Entry> iterator = values.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Values.Entry entry = iterator.next();
+        Iterator<Values.Entry> valuesIterator = values.entrySet().iterator();
+        while (valuesIterator.hasNext()) {
+            Values.Entry entry = valuesIterator.next();
             Cell cell = row.getCell(entry.getKey().getIndex());
             if (cell == null || ! entry.getValue().equals(cell.getStringCellValue()))
                 return false;
@@ -153,7 +154,7 @@ public class Writer
         try {
             Logger.getInstance().logDebug(TAG, "writing spreadsheet document");
 
-            stream = new FileOutputStream(new File(filePath), true);
+            stream = new FileOutputStream(new File(filePath), false);
             document.write(stream);
             stream.flush();
             stream.close();
