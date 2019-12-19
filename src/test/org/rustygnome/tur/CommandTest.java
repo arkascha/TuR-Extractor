@@ -7,6 +7,10 @@ import org.junit.jupiter.params.provider.EnumSource;
 import org.rustygnome.tur.factory.Factored;
 import org.rustygnome.tur.factory.Factory;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -112,6 +116,24 @@ public class CommandTest {
 
         // then: no input should have been set
         assertNull(command.getOptionValue(option.optionString));
+    }
+
+    @Test
+    public void anUndefinedCliArgumentValue_shouldResultInTheUsageMessage()
+            throws UnsupportedEncodingException {
+
+        // given: a command object
+        Command command = Command.getInstance().setupOptions();
+        // and: a captured StdErr output
+        ByteArrayOutputStream stdOut = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(stdOut, true, "UTF-8"));
+
+        // when: CLI args with an undefined option "-r"
+        String[] args = new String[]{"-r"};
+        command.processArgs(args);
+
+        // then: no input should have been set
+        assertTrue(stdOut.toString().trim().contains("usage:"));
     }
 
     enum ImplementedOption {

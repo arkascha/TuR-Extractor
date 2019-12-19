@@ -9,8 +9,6 @@ public class Command
 
     static final String TAG = Command.class.getSimpleName();
 
-    static private final String COMMAND_NAME = "tur-extract";
-
     private Options options;
     private CommandLine commandLine;
 
@@ -82,13 +80,10 @@ public class Command
 
         try {
             commandLine = parser.parse(options, args);
-        } catch (ParseException e) {
-            Logger.getInstance().logException(TAG, e);
-            formatter.printHelp(COMMAND_NAME, options);
-
-            System.exit(1);
+        } catch (Exception e) {
+            formatter.printHelp(Application.packageTitle, options);
+            return null;
         }
-
         return this;
     }
 }

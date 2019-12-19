@@ -29,20 +29,22 @@ public class Application
     }
 
     void startUp(String[] args) {
-        Command.getInstance().setupOptions().processArgs(args);
-        Logger.getInstance().logDebug(TAG, "application starting up");
+        Command command = Command.getInstance().setupOptions().processArgs(args);
+        if (command != null) {
+            Logger.getInstance().logDebug(TAG, "application starting up");
 
-        readPackageInformation(Application.class.getPackage());
+            readPackageInformation(Application.class.getPackage());
 
-        try {
-            Logger.getInstance().logDebug(TAG, "creating controller");
-            Controller controller = Factored.getFactory(Controller.class).createArtifact();
-            controller.run();
-        } catch(Exception e) {
-            if (Command.hasOption("action")) {
-                Logger.getInstance().logResult("FAILURE");
+            try {
+                Logger.getInstance().logDebug(TAG, "creating controller");
+                Controller controller = Factored.getFactory(Controller.class).createArtifact();
+                controller.run();
+            } catch (Exception e) {
+                if (Command.hasOption("action")) {
+                    Logger.getInstance().logResult("FAILURE");
+                }
+                Logger.getInstance().logException(TAG, e);
             }
-            Logger.getInstance().logException(TAG, e);
         }
     }
 
