@@ -2,6 +2,17 @@
 This is a simple utility that allows to process text messages, extract tokens from those messages which will get inserted into a spreadsheet document by appending them on a given sheet. 
 It can be configured to process incoming messages to an email account by using the email application's "filter" feature which allows to pipe incoming messages to get them processed. 
 
+## Author
+Christian Reiner                                                                                                                                                                                                      
+Web: https://christian-reiner.info                                                                                                                                                                                                      
+Contact: github@christian-reiner.info                                                                                                                                                                                                      
+
+## Licence
+This software is published under the GNU GPLv3 license. 
+
+This licence defines your rights to use and modify this software as you like with a few but important exception. Please check the details if you are not yet familiar with this type of licence: 
+https://choosealicense.com/licenses/gpl-3.0/
+
 ## Operation
 Two operation modes are offered: 
 
@@ -39,3 +50,5 @@ Those messages can be fed as a sequence in one of theses ways
 ## Build
 The utility is implemented based on the IntelliJ IDEA environment. Project meta files are included, so setting up a new project from a cloned git repository should be straight forward. 
 No magic is involved though, so it should be possible to use any environment that provides a java SDK and compiler version 1.8 or up. No specific java flavor is required. 
+
+The build process itself is gradle based. So it allows for using a headless pipeline for creating artifacts and distributions. The current release is based on a github workflow pipeline. 
