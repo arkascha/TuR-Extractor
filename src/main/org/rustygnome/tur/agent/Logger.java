@@ -11,7 +11,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 
 public class Logger
-        extends Factored {
+        extends Factored<Logger> {
 
     static final String TAG = Logger.class.getSimpleName();
 

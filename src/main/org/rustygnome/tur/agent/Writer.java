@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.Iterator;
 
 public class Writer
-        extends Factored {
+        extends Factored<Writer> {
 
     static final String TAG = Writer.class.getSimpleName();
 
@@ -31,10 +31,8 @@ public class Writer
     public boolean write(Values values) {
         Logger.getInstance().logDebug(TAG, "writing values");
 
-        if (values != null) {
-            if (Command.hasOption("output")) {
-                return writeToXlsx(values);
-            }
+        if (values != null && Command.hasOption("output")) {
+            return writeToXlsx(values);
         }
         return false;
     }
@@ -138,12 +136,11 @@ public class Writer
     }
 
     private boolean rowHoldsValues(@NotNull Row row, @NotNull Values values) {
-        Iterator<Values.Entry> valuesIterator = values.entrySet().iterator();
-        while (valuesIterator.hasNext()) {
-            Values.Entry entry = valuesIterator.next();
+        for (Values.Entry entry : values.entrySet()) {
             Cell cell = row.getCell(entry.getKey().getIndex());
-            if (cell == null || ! entry.getValue().equals(cell.getStringCellValue()))
+            if (cell == null || !entry.getValue().equals(cell.getStringCellValue())) {
                 return false;
+            }
         }
         return true;
     }

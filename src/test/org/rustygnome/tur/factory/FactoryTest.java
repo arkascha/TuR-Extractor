@@ -86,9 +86,9 @@ public class FactoryTest {
         READER(Reader.class),
         WRITER(Writer.class);
 
-        public Class type;
+        public Class<? extends Factored> type;
 
-        FactoredType(Class type) {
+        FactoredType(Class<? extends Factored> type) {
             this.type = type;
         }
     }

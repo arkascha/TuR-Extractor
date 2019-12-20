@@ -6,9 +6,8 @@ public enum Key {
     EMAIL(2, "E-Mail"),
     INTERESTS(3, "Interessen");
 
-
-    private int index;
-    private String name;
+    private final int index;
+    private final String name;
 
     Key(int index, String name) {
         this.index = index;

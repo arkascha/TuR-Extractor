@@ -10,14 +10,15 @@ import java.time.format.DateTimeParseException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class Parser
-        extends Factored {
+        extends Factored<Parser> {
 
     static final String TAG = Parser.class.getSimpleName();
 
-    private final String DATE_PATTERN = "yyyy-MM'= =2D'dd HH:mm:ss";
-    private final String DATE_FORMAT = "dd.MM.yyyy HH:mm";
-    private final String EXTRACTION_REGEX =
+    private static final String DATE_PATTERN = "yyyy-MM'= =2D'dd HH:mm:ss";
+    private static final String DATE_FORMAT = "dd.MM.yyyy HH:mm";
+    private static final String EXTRACTION_REGEX =
         "\\s+Name, Vorname:(.*)$" +
         "\\s+E-Mail:(.*)$" +
         "\\s+Meine Hauptinteressen sind\\s+\\.+:(.*)$" +
@@ -65,9 +66,10 @@ public class Parser
             try {
                 LocalDateTime dateTime = LocalDateTime.from(DateTimeFormatter.ofPattern(DATE_PATTERN).parse(datetime));
                 return dateTime.format(DateTimeFormatter.ofPattern(DATE_FORMAT));
-            } catch (DateTimeParseException e) { }
+            } catch (DateTimeParseException e) {
+                return datetime;
+            }
         }
-
         return datetime;
     }
 }

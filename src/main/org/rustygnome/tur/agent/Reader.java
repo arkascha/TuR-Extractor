@@ -10,7 +10,7 @@ import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
 
 public class Reader
-        extends Factored {
+        extends Factored<Reader> {
 
     static final String TAG = Reader.class.getSimpleName();
 
@@ -27,6 +27,7 @@ public class Reader
         if (inputStream != null) {
             CharBuffer inputBuffer = CharBuffer.allocate(10000);
             try {
+                //noinspection ResultOfMethodCallIgnored
                 new InputStreamReader(inputStream).read(inputBuffer);
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -40,12 +41,14 @@ public class Reader
     }
 
     private String decodeInput(String string) {
-        string = string.replaceAll("=", "%");
+        String decodedString;
         try {
-            string = java.net.URLDecoder.decode(string, StandardCharsets.UTF_8.name());
+            decodedString = java.net.URLDecoder.decode(
+                    string.replaceAll("=", "%"),
+                    StandardCharsets.UTF_8.name());
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
-        return string;
+        return decodedString;
     }
 }

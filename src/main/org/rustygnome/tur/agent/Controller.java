@@ -10,7 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 public class Controller
-        extends Factored {
+        extends Factored<Controller> {
 
     static final String TAG = Controller.class.getSimpleName();
 

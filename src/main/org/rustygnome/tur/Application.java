@@ -5,7 +5,7 @@ import org.rustygnome.tur.agent.Logger;
 import org.rustygnome.tur.factory.Factored;
 
 public class Application
-        extends Factored {
+        extends Factored<Application> {
 
     static final String TAG = Application.class.getSimpleName();
 

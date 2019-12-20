@@ -26,10 +26,6 @@ apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'idea'
 apply plugin: 'application'
 
-// Static Analysis
-apply plugin: 'pmd'
-apply plugin: 'checkstyle'
-
 def defaultEncoding = 'UTF-8'
 
 sourceCompatibility = 1.8

@@ -77,9 +77,9 @@ public class CommandTest {
 
         // then: no input should have been set
         if (option.hasValue) {
-            assertEquals("someArbitraryValue", command.getOptionValue(option.optionString));
+            assertEquals("someArbitraryValue", Command.getOptionValue(option.optionString));
         } else {
-            assertTrue(command.hasOption(option.optionString));
+            assertTrue(Command.hasOption(option.optionString));
         }
     }
 
@@ -97,9 +97,9 @@ public class CommandTest {
 
         // then: no input should have been set
         if (option.hasValue) {
-            assertEquals("someArbitraryValue", command.getOptionValue(option.optionString));
+            assertEquals("someArbitraryValue", Command.getOptionValue(option.optionString));
         } else {
-            assertTrue(command.hasOption(option.optionString));
+            assertTrue(Command.hasOption(option.optionString));
         }
     }
 
@@ -115,7 +115,7 @@ public class CommandTest {
         command.processArgs(cliArgs);
 
         // then: no input should have been set
-        assertNull(command.getOptionValue(option.optionString));
+        assertNull(Command.getOptionValue(option.optionString));
     }
 
     @Test

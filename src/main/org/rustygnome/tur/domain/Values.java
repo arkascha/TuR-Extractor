@@ -71,8 +71,8 @@ public class Values {
 
     static public class Entry {
 
-        private Key key;
-        private String value;
+        private final Key key;
+        private final String value;
 
         Entry(Map.Entry<Key, String> entry) {
             this.key = entry.getKey();
@@ -85,10 +85,6 @@ public class Values {
 
         public String getValue() {
             return value;
-        }
-
-        public void setValue(String values) {
-            this.value = value;
         }
     }
 }

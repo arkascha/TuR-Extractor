@@ -1,11 +1,10 @@
 package org.rustygnome.tur;
 
 import org.apache.commons.cli.*;
-import org.rustygnome.tur.agent.Logger;
 import org.rustygnome.tur.factory.Factored;
 
 public class Command
-        extends Factored {
+        extends Factored<Command> {
 
     static final String TAG = Command.class.getSimpleName();
 
