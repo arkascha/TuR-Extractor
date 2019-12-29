@@ -37,11 +37,13 @@ Those messages can be fed as a sequence in one of theses ways
 * `-a` | `--action`: (optional) output the performed action
 * `-e` | `--echo`: (optional) output the processed values
 * `-d` | `--debug`: (optional) log debugging info
+* `-h` | `--help`: (optional) output the usage message
 * `-i <path>` | `--input=<path>`: (optional) a local file system path to the input message file, "-" selects STDIN
 * `-o <path>` | `--output=<path>`: (optional) a local file system path to the target spreadsheet document
 * `-s <name>` | `--sheet=<name>`: (optional, defaults to "Contacts") the title of the target document sheet 
 * `-t` | `--time`: (optional) output the time of action
 * `-v` | `--version`: (optional) output the utilities name and version number
+* `-?` | `--usage`: (optional) output the usage message
 
 `<path>`: a local file system path (e.g. /var/spool/messages/inbound)
 
@@ -51,4 +53,20 @@ Those messages can be fed as a sequence in one of theses ways
 The utility is implemented based on the IntelliJ IDEA environment. Project meta files are included, so setting up a new project from a cloned git repository should be straight forward. 
 No magic is involved though, so it should be possible to use any environment that provides a java SDK and compiler version 1.8 or up. No specific java flavor is required. 
 
-The build process itself is gradle based. So it allows for using a headless pipeline for creating artifacts and distributions. The current release is based on a github workflow pipeline. 
+The build process itself is gradle based. So it allows for using a headless pipeline for creating artifacts and distributions. The current release is based on a github workflow pipeline.
+
+## Example
+
+### Processing of incoming emails
+The utility can be configured as a filter to process incoming email messages along with the "filter message" feature modern email applications offer. Here are two of such setups: 
+
+#### kmail2 (KDE plasma and akonadi based, part of the 'kontact' PIM suite):
+The "settings" menu allows to "Configure filters". Here you can define a new filter "TuR-Extractor" which you can defined to get applied to your liking, automatically or manually, on all or just specific messages. 
+
+As a filter action you chose "Execute command" and enter something like `java -jar /path/toTuR-Extractor.jar -aei - -o /path/to/document.xlsm -s "import"`. 
+
+This allows to add one entry per incoming email message to an existing or created spreadsheet document on the existing or created sheet "incoming". 
+
+As a variant to can add logging which allows to track down issues with your setup. 
+For that use standard shell features: `java -jar /path/toTuR-Extractor.jar -aei - -o /path/to/document.xlsm -s "import" 1>/path/to/TuR-Extractor.log 2>&1`. 
+That way you receive a fresh log of a processed message for each event including useful information like missing folders are file system permission stuff. 

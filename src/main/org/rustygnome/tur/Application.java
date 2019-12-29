@@ -18,7 +18,7 @@ public class Application
 
     static public void main(String[] args) {
         try {
-            getInstance().startUp(args);
+            getInstance().setUp(args).startUp();
         } catch (Exception e) {
             Logger.getInstance().logException(TAG, e);
         }
@@ -28,9 +28,18 @@ public class Application
         super();
     }
 
-    void startUp(String[] args) {
-        Command command = Command.getInstance().setupOptions().processArgs(args);
-        if (command != null) {
+    Application setUp(String[] args) {
+        Command.getInstance().setupOptions().processArgs(args);
+
+        if (Command.hasOption("usage") || Command.hasOption("help")) {
+            Command.getInstance().printUsage();
+        }
+
+        return getInstance();
+    }
+
+    Application startUp() {
+        if (Command.getInstance() != null) {
             Logger.getInstance().logDebug(TAG, "application starting up");
 
             readPackageInformation(Application.class.getPackage());
@@ -46,6 +55,7 @@ public class Application
                 Logger.getInstance().logException(TAG, e);
             }
         }
+        return getInstance();
     }
 
     void readPackageInformation(Package applicationPackage) {

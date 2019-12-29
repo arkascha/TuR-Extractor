@@ -70,6 +70,14 @@ public class Command
         versionOption.setRequired(false);
         options.addOption(versionOption);
 
+        Option helpOption = new Option("h", "help", false, "print usage help");
+        helpOption.setRequired(false);
+        options.addOption(helpOption);
+
+        Option usageOption = new Option("?", "usage", false, "print usage help");
+        usageOption.setRequired(false);
+        options.addOption(usageOption);
+
         return this;
     }
 
@@ -84,5 +92,10 @@ public class Command
             return null;
         }
         return this;
+    }
+
+    public void printUsage() {
+        HelpFormatter formatter = new HelpFormatter();
+        formatter.printHelp( Application.packageTitle, options );
     }
 }

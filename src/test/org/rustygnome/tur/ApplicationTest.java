@@ -2,9 +2,13 @@ package org.rustygnome.tur;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.rustygnome.tur.agent.Logger;
 import org.rustygnome.tur.factory.Factored;
 import org.rustygnome.tur.factory.Factory;
+
+import java.io.UnsupportedEncodingException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -68,5 +72,24 @@ public class ApplicationTest {
         // then: the package information should be available
         assertEquals("the title", Application.packageTitle);
         assertEquals("the version", Application.packageVersion);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings={"--help", "--usage", "-h", "-?"})
+    public void printUsage_shouldPrintTheUsageMessage(String commandLineArgument)
+            throws UnsupportedEncodingException {
+
+        // given: an Application
+        Application application = Application.getInstance();
+        // and: a command object
+        Command command = CommandTest.aCommand("");
+        Command commandSpy = spy(command);
+        Command.setInstance(Command.class, commandSpy);
+
+        // when: the method is called
+        application.setUp(new String[]{commandLineArgument});
+
+        // then: the usage message should get printed
+        verify(commandSpy, times(1)).printUsage();
     }
 }

@@ -136,6 +136,23 @@ public class CommandTest {
         assertTrue(stdOut.toString().trim().contains("usage:"));
     }
 
+    @Test
+    public void printUsage_shouldPrintTheUsageMessage()
+            throws UnsupportedEncodingException {
+
+        // given: a command object
+        Command command = aCommand("");
+        // and: a captured StdErr output
+        ByteArrayOutputStream stdOut = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(stdOut, true, "UTF-8"));
+
+        // when: the "printUsage" method is called
+        command.printUsage();
+
+        // then: the usage message should get printed
+        assertTrue(stdOut.toString().trim().contains("usage:"));
+    }
+
     enum ImplementedOption {
         ACTION('a', "action", false),
         ECHO('e', "echo", false),
