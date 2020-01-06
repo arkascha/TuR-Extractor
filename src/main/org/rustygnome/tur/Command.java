@@ -16,15 +16,24 @@ public class Command
     }
 
     static public boolean hasOption(String optionName)  {
-        return getInstance().getCommandLine().hasOption(optionName);
+        CommandLine commandLine = getInstance().getCommandLine();
+        return commandLine != null && commandLine.hasOption(optionName);
     }
 
     static public String getOptionValue(String optionName)  {
-        return getInstance().getCommandLine().getOptionValue(optionName);
+        CommandLine commandLine = getInstance().getCommandLine();
+        if (commandLine != null) {
+            return getInstance().getCommandLine().getOptionValue(optionName);
+        }
+        return null;
     }
 
     static public String getOptionValue(String optionName, String defaultValue)  {
-        return getInstance().getCommandLine().getOptionValue(optionName, defaultValue);
+        CommandLine commandLine = getInstance().getCommandLine();
+        if (commandLine != null) {
+            return getInstance().getCommandLine().getOptionValue(optionName, defaultValue);
+        }
+        return null;
     }
 
     public Command() {
