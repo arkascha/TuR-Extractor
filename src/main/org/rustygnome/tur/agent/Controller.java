@@ -5,9 +5,13 @@ import org.rustygnome.tur.Command;
 import org.rustygnome.tur.domain.Values;
 import org.rustygnome.tur.factory.Factored;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Controller
         extends Factored<Controller> {
@@ -29,33 +33,74 @@ public class Controller
     public void run() {
         Logger.getInstance().logDebug(TAG, "controller running");
 
-        String message = Reader.getInstance().read(setupInput());
-        Values values = Parser.getInstance().parse(message);
-        boolean exported = Writer.getInstance().write(values);
-        Logger.getInstance().logValues(exported, values);
+        if (Command.hasOption("infile")) {
+            processInfileOption();
+        }
+        if (Command.hasOption("inpattern")) {
+            processInpatternOption();
+        }
 
         Logger.getInstance().logDebug(TAG, "controller finished");
     }
 
-    private InputStream setupInput() {
-        Logger.getInstance().logDebug(TAG, "setting up input");
+    private void processInput(InputStream input) {
+        Logger.getInstance().logDebug(TAG, "processing input");
 
-        if (Command.hasOption("input")) {
+        String message = Reader.getInstance().read(input);
+        Values values = Parser.getInstance().parse(message);
+        boolean exported = Writer.getInstance().write(values);
+        Logger.getInstance().logValues(exported, values);
+    }
 
-            String inputOptionValue = Command.getOptionValue("input", null);
+    private void processInfileOption() {
+        String inputOptionValue = Command.getOptionValue("infile", null);
+        if (inputOptionValue != null) {
             if (inputOptionValue.equals("-")) {
                 Logger.getInstance().logDebug(TAG, "reading from StdIn");
-                return System.in;
-            }
-            Logger.getInstance().logDebug(TAG, "reading from file");
-            try {
-                return new FileInputStream(inputOptionValue);
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
+                processInput(System.in);
+            } else {
+                Logger.getInstance().logDebug(TAG, String.format("reading from input file '%s'", inputOptionValue));
+                processInput(setupInfile(inputOptionValue));
             }
         }
-        Logger.getInstance().logDebug(TAG, "not reading any input");
-        return null;
+    }
+
+    private void processInpatternOption() {
+        String inputOptionValue = Command.getOptionValue("inpattern", null);
+        Map<String, InputStream> inputMap = setupInpattern(inputOptionValue);
+        for (String inputKey : inputMap.keySet()) {
+            Logger.getInstance().logDebug(TAG, String.format("reading from input file '%s'", inputKey));
+            processInput(inputMap.get(inputKey));
+        }
+    }
+
+    private InputStream setupInfile(String inputOptionValue) {
+        try {
+            return new FileInputStream(inputOptionValue);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Map<String, InputStream> setupInpattern(String inputOptionValue) {
+        Map<String, InputStream> inputFiles = new HashMap<>();
+
+        try {
+            File glob = new File(inputOptionValue);
+            Files.newDirectoryStream(Paths.get(glob.getParent()), glob.getName()).forEach(
+                    file -> {
+                        try {
+                            inputFiles.put(file.toString(), new FileInputStream(file.toString()));
+                        } catch (FileNotFoundException e) {
+                            Logger.getInstance().logDebug(TAG, String.format("ignoring input file '%s'", file));
+                        }
+                    }
+            );
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return inputFiles;
     }
 
     void outputPackageInformation() {

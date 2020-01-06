@@ -31,7 +31,7 @@ public class Writer
     public boolean write(Values values) {
         Logger.getInstance().logDebug(TAG, "writing values");
 
-        if (values != null && Command.hasOption("output")) {
+        if (values != null && Command.hasOption("outfile")) {
             return writeToXlsx(values);
         }
         return false;
@@ -42,7 +42,7 @@ public class Writer
 
         boolean exported = false;
 
-        String outputPath = Command.getOptionValue("output");
+        String outputPath = Command.getOptionValue("outfile");
         String sheetName = Command.getOptionValue("sheet", "Kontakte");
         XSSFWorkbook document = openDocument(outputPath, sheetName);
         XSSFSheet sheet = document.getSheet(sheetName);

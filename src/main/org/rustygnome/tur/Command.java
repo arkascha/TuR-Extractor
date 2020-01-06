@@ -59,13 +59,17 @@ public class Command
         echoOption.setRequired(false);
         options.addOption(echoOption);
 
-        Option inputOption = new Option("i", "input", true, "input file path");
-        inputOption.setRequired(false);
-        options.addOption(inputOption);
+        Option infileOption = new Option("i", "infile", true, "input file path");
+        infileOption.setRequired(false);
+        options.addOption(infileOption);
 
-        Option outputOption = new Option("o", "output", true, "output file path");
-        outputOption.setRequired(false);
-        options.addOption(outputOption);
+        Option inpatternOption = new Option("I", "inpattern", true, "input file pattern");
+        inpatternOption.setRequired(false);
+        options.addOption(inpatternOption);
+
+        Option outfileOption = new Option("o", "outfile", true, "output file path");
+        outfileOption.setRequired(false);
+        options.addOption(outfileOption);
 
         Option sheetOption = new Option("s", "sheet", true, "document sheet name");
         sheetOption.setRequired(false);

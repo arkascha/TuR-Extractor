@@ -9,6 +9,7 @@ import org.rustygnome.tur.domain.Values;
 import org.rustygnome.tur.factory.Factored;
 import org.rustygnome.tur.factory.Factory;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
@@ -66,7 +67,10 @@ public class ControllerTest {
     public void run_shouldUseAllArtifactsByTheirMainPurpose() {
 
         // given: a command
-        CommandTest.aCommand("");
+        CommandTest.aCommand("-i -");
+        // and: some input to read
+        final String input = "Postprophylaktische Suboptimalität";
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
 
         // and: some mocked artifacts
         Logger mockedLogger = mock(Logger.class);
@@ -90,7 +94,7 @@ public class ControllerTest {
         // when: running that controller
         controller.run();
 
-        // then: all artifacts should get used once by their main purpose
+        // then: all artifacts should get used by their main purpose
         verify(mockedLogger, times(1)).logValues(anyBoolean(), any());
         verify(mockedParser, times(1)).parse(anyString());
         verify(mockedReader, times(1)).read(any());

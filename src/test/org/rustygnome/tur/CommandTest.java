@@ -91,15 +91,14 @@ public class CommandTest {
         Command command = aCommand("");
 
         // when: CLI args without input option are processed
-        final String cliString = String.format("--%s %s", option.optionChar, "someArbitraryValue");
+        final String cliString = String.format("-%c %s", option.optionChar, "someArbitraryValue");
         String[] args = cliString.split(" ", 2);
         command.processArgs(args);
 
-        // then: no input should have been set
+        // then: the input arg should get processed correctly
+        assertTrue(Command.hasOption(option.optionString));
         if (option.hasValue) {
             assertEquals("someArbitraryValue", Command.getOptionValue(option.optionString));
-        } else {
-            assertTrue(Command.hasOption(option.optionString));
         }
     }
 
@@ -156,8 +155,9 @@ public class CommandTest {
     enum ImplementedOption {
         ACTION('a', "action", false),
         ECHO('e', "echo", false),
-        INPUT('i', "input", true),
-        OUTPUT('o', "output", true),
+        INFILE('i', "infile", true),
+        INPATTERN('I', "inpattern", true),
+        OUTPUT('o', "outfile", true),
         SHEET('s', "sheet", true),
         TIME('t', "time", false),
         VERSION('v', "version", false);
