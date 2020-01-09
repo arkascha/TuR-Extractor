@@ -3,7 +3,6 @@ package org.rustygnome.tur.agent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.rustygnome.tur.Application;
-import org.rustygnome.tur.Command;
 import org.rustygnome.tur.CommandTest;
 import org.rustygnome.tur.domain.Values;
 import org.rustygnome.tur.factory.Factored;

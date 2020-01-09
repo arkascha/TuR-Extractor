@@ -41,6 +41,7 @@ Those messages can be fed as a sequence in one of theses ways
 * `-I <pattern>` | `--inpattern=<pattern>`: (optional) a local file system path pattern of input message files
 * `-l` | `--log`: (optional) log debugging info
 * `-o <path>` | `--outfile=<path>`: (optional) a local file system path of a output spreadsheet document
+* `-r` | `--remove`: (optional) remove the processed input file (delete from file system)
 * `-s <name>` | `--sheet=<name>`: (optional, defaults to "Contacts") the title of the target document sheet 
 * `-t` | `--time`: (optional) output the time of action
 * `-v` | `--version`: (optional) output the utilities name and version number

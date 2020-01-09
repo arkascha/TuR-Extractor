@@ -6,9 +6,7 @@ import org.rustygnome.tur.domain.Values;
 import org.rustygnome.tur.factory.Factored;
 
 import java.io.*;
-import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,14 +51,15 @@ public class Controller
     }
 
     private void processInfileOption() {
-        String inputOptionValue = Command.getOptionValue("infile", null);
-        if (inputOptionValue != null) {
-            if (inputOptionValue.equals("-")) {
+        String inputFilePath = Command.getOptionValue("infile", null);
+        if (inputFilePath != null) {
+            if (inputFilePath.equals("-")) {
                 Logger.getInstance().logDebug(TAG, "reading from StdIn");
                 processInput(System.in);
             } else {
-                Logger.getInstance().logDebug(TAG, String.format("reading from input file '%s'", inputOptionValue));
-                processInput(setupInfile(inputOptionValue));
+                Logger.getInstance().logDebug(TAG, String.format("reading from input file '%s'", inputFilePath));
+                processInput(setupInfile(inputFilePath));
+                removeInputFile(inputFilePath);
             }
         }
     }
@@ -71,6 +70,15 @@ public class Controller
         for (String inputKey : inputMap.keySet()) {
             Logger.getInstance().logDebug(TAG, String.format("reading from input file '%s'", inputKey));
             processInput(inputMap.get(inputKey));
+            removeInputFile(inputKey);
+        }
+    }
+
+    private void removeInputFile(String filePath) {
+        if (Command.hasOption("remove")) {
+            Logger.getInstance().logDebug(TAG, String.format("removing input file '%s'", filePath));
+            File inputFile = new File(filePath);
+            inputFile.deleteOnExit();
         }
     }
 

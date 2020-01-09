@@ -71,6 +71,10 @@ public class Command
         outfileOption.setRequired(false);
         options.addOption(outfileOption);
 
+        Option removeOption = new Option("r", "remove", false, "remove processed input files");
+        removeOption.setRequired(false);
+        options.addOption(removeOption);
+
         Option sheetOption = new Option("s", "sheet", true, "document sheet name");
         sheetOption.setRequired(false);
         options.addOption(sheetOption);
