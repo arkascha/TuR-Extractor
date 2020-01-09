@@ -51,10 +51,6 @@ public class Command
         actionOption.setRequired(false);
         options.addOption(actionOption);
 
-        Option debugOption = new Option("d", "debug", false, "write debug output");
-        debugOption.setRequired(false);
-        options.addOption(debugOption);
-
         Option echoOption = new Option("e", "echo", false, "echo exported values");
         echoOption.setRequired(false);
         options.addOption(echoOption);
@@ -66,6 +62,10 @@ public class Command
         Option inpatternOption = new Option("I", "inpattern", true, "input file pattern");
         inpatternOption.setRequired(false);
         options.addOption(inpatternOption);
+
+        Option logOption = new Option("l", "log", false, "log debug output");
+        logOption.setRequired(false);
+        options.addOption(logOption);
 
         Option outfileOption = new Option("o", "outfile", true, "output file path");
         outfileOption.setRequired(false);

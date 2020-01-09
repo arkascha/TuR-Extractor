@@ -36,10 +36,10 @@ Those messages can be fed as a sequence in one of theses ways
 `<options>`: 
 * `-a` | `--action`: (optional) output the performed action
 * `-e` | `--echo`: (optional) output the processed values
-* `-d` | `--debug`: (optional) log debugging info
 * `-h` | `--help`: (optional) output the usage message
 * `-i <path>` | `--infile=<path>`: (optional) a local file system path of an input message file, "-" selects STDIN
 * `-I <pattern>` | `--inpattern=<pattern>`: (optional) a local file system path pattern of input message files
+* `-l` | `--log`: (optional) log debugging info
 * `-o <path>` | `--outfile=<path>`: (optional) a local file system path of a output spreadsheet document
 * `-s <name>` | `--sheet=<name>`: (optional, defaults to "Contacts") the title of the target document sheet 
 * `-t` | `--time`: (optional) output the time of action
