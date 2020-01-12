@@ -36,7 +36,7 @@ public class Logger
     }
 
     public void log(@NotNull String message, boolean debug) {
-        if (debug && Command.hasOption("debug")) {
+        if (debug && Command.hasOption("log")) {
             System.err.println(message);
             System.err.flush();
         } else {
@@ -46,7 +46,7 @@ public class Logger
     }
 
     public void logDebug(String tag, String message) {
-        if (Command.hasOption("debug")) {
+        if (Command.hasOption("log")) {
             getInstance().log(tag + ": " + message, true);
         }
     }

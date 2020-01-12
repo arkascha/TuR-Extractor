@@ -51,10 +51,6 @@ public class Command
         actionOption.setRequired(false);
         options.addOption(actionOption);
 
-        Option debugOption = new Option("d", "debug", false, "write debug output");
-        debugOption.setRequired(false);
-        options.addOption(debugOption);
-
         Option echoOption = new Option("e", "echo", false, "echo exported values");
         echoOption.setRequired(false);
         options.addOption(echoOption);
@@ -67,9 +63,17 @@ public class Command
         inpatternOption.setRequired(false);
         options.addOption(inpatternOption);
 
+        Option logOption = new Option("l", "log", false, "log debug output");
+        logOption.setRequired(false);
+        options.addOption(logOption);
+
         Option outfileOption = new Option("o", "outfile", true, "output file path");
         outfileOption.setRequired(false);
         options.addOption(outfileOption);
+
+        Option removeOption = new Option("r", "remove", false, "remove processed input files");
+        removeOption.setRequired(false);
+        options.addOption(removeOption);
 
         Option sheetOption = new Option("s", "sheet", true, "document sheet name");
         sheetOption.setRequired(false);
