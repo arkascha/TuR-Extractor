@@ -51,6 +51,10 @@ public class Command
         actionOption.setRequired(false);
         options.addOption(actionOption);
 
+        Option daemonOption = new Option("d", "daemon", true, "daemon mode");
+        daemonOption.setRequired(false);
+        options.addOption(daemonOption);
+
         Option echoOption = new Option("e", "echo", false, "echo exported values");
         echoOption.setRequired(false);
         options.addOption(echoOption);

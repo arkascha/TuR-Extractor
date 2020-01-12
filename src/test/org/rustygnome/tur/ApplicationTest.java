@@ -8,6 +8,8 @@ import org.rustygnome.tur.agent.Logger;
 import org.rustygnome.tur.factory.Factored;
 import org.rustygnome.tur.factory.Factory;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -91,5 +93,27 @@ public class ApplicationTest {
 
         // then: the usage message should get printed
         verify(commandSpy, times(1)).printUsage();
+    }
+
+    @Test
+    public void cliArgumentVersion_shouldOutputProcessedValues()
+            throws UnsupportedEncodingException {
+
+        // given: a set of command line options
+        String[] args = new String[]{"-v"};
+
+        // and: a captured StdErr output
+        ByteArrayOutputStream stdOut = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(stdOut, true, "UTF-8"));
+
+        // when: a Application ist instantiated
+        Application.getInstance().setUp(args);
+
+        // then: the output should contain the package information
+        String expectedInformation = String.format(
+                "version: %s (%s)",
+                Application.packageTitle,
+                Application.packageVersion);
+        assertEquals(expectedInformation, stdOut.toString().trim());
     }
 }

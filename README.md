@@ -36,6 +36,7 @@ Those messages can be fed as a sequence in one of theses ways
 `<options>`: 
 * `-a` | `--action`: (optional) output the performed action
 * `-e` | `--echo`: (optional) output the processed values
+* `-D` | `--daemon`: (optional) daemon mode
 * `-h` | `--help`: (optional) output the usage message
 * `-i <path>` | `--infile=<path>`: (optional) a local file system path of an input message file, "-" selects STDIN
 * `-I <pattern>` | `--inpattern=<pattern>`: (optional) a local file system path pattern of input message files
@@ -68,23 +69,30 @@ The utility can be configured as a filter to process incoming email messages alo
 ###### (KDE plasma and akonadi based email client, part of the 'kontact' PIM suite)
 The "settings" menu allows to "Configure filters". Here you can define a new filter "TuR-Extractor" which you can defined to get applied to your liking, automatically or manually, on all or just specific messages. 
 
-As a filter action you chose "Execute command" and enter something like `java -jar /path/toTuR-Extractor.jar -aei - -o /path/to/document.xlsm -s "import"`. 
+As a filter action you chose "Execute command" and enter something like `java -jar /path/toTuR-Extractor.jar -aei - -o /path/to/document.xlsm`. 
 
 This allows to add one entry per incoming email message to an existing or created spreadsheet document on the existing or created sheet "incoming". 
 
 As a variant to can add logging which allows to track down issues with your setup. 
-For that use standard shell features: `java -jar /path/toTuR-Extractor.jar -aei - -o /path/to/document.xlsm -s "import" 1>/path/to/TuR-Extractor.log 2>&1`. 
+For that use standard shell features: `java -jar /path/toTuR-Extractor.jar -aei - -o /path/to/document.xlsm" 1>/path/to/TuR-Extractor.log 2>&1`. 
 That way you receive a fresh log of a processed message for each event including useful information like missing folders are file system permission stuff.
 
 #### read from a single local file
 ###### (allows to specify a single file path on the command line)
 A specific file in the local file system can be specified on the command line. That files content will get read, parsed and processed as plain text: 
 
-`java -jar ./path/toTuR-Extractor.jar -aei ./messages/inbound.data -o path/to/document.xlsm -s "import"`. 
+`java -jar ./path/toTuR-Extractor.jar -aei ./messages/inbound.data -o path/to/document.xlsm`. 
 
 #### read from multiple files specified by a pattern 
 ###### (glob like feature to scan a file system folder)
 You can specify a glob like file path pattern to select multiple files in the local file system to get processed. 
 A typical scenario for this would be a local spool folder where incoming messages are dropped: 
 
-`java -jar ./path/toTuR-Extractor.jar -aeI ./messages/message-*.text -o path/to/document.xlsm -s "import"`. 
+`java -jar ./path/toTuR-Extractor.jar -aeI ./messages/message-*.text -o path/to/document.xlsm` 
+
+#### start in daemon mode for continuous processing
+Started in daemom mode the utility will fork into background and continuously process any input. All input options are usable: 
+ * -i file / --input=file is interpreted as a socket in the local file system (only in Unix/Linux environments)
+ * -i - listens on the process StdIn
+ 
+ `java -jar ./path/toTuR-Extractor.jar -aeDi - -o path/to/document.xlsm`

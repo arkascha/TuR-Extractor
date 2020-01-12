@@ -53,30 +53,15 @@ public class ParserTest {
     }
 
     @Test
-    public void extract_shouldThrowAnExceptionWithoutMessageToExtractFrom() {
-
-        // given: a Command that specifies the "version" option
-        CommandTest.aCommand("");
-        // and: the parser
-        Parser parser = Parser.getInstance();
-
-        // when: the extraction is performed
-        Values values = parser.parse(null);
-
-        // then: a placeholder output should appear in STDOUT
-        assertNull(values);
-    }
-
-    @Test
     public void extract_shouldExtractValuesAsExpected() {
 
         // given: a message as expected
-        final String message =
+        StringBuffer message = new StringBuffer(
                 "\n Name, Vorname: In die Luft, Hans  " +
                 "\nE-Mail: hans@mailinator.com " +
                 "\nMeine Hauptinteressen sind ....: Freunde am Miteinander! " +
                 "\nNutzer hat die Datenschutzerkl=C3=A4rung akzeptiert. " +
-                "\nDatum/Uhrzeit: 1999-09-19 09:19:29 CET \n";
+                "\nDatum/Uhrzeit: 1999-09-19 09:19:29 CET \n");
         // and: a Command that specifies the "version" option
         CommandTest.aCommand("");
         // and: the parser
@@ -93,36 +78,15 @@ public class ParserTest {
     }
 
     @Test
-    public void extract_shouldThroughAnExceptionIfMessageStructureDoesNotMatch() {
-
-        // given: a message with unexpected structure
-        final String message =
-                "\n Name, Beruf: Martin, Clown " +
-                "\nFax-Nummer: 08/15 " +
-                "\nHobbies\\s+\\.+: Warten " +
-                "\nDatum/Uhrzeit: vorgestern \n";
-        // and: a Command that specifies the "version" option
-        CommandTest.aCommand("");
-        // and: the parser
-        Parser parser = Parser.getInstance();
-
-        // when: the extraction is performed
-        // then: an exception should get raised
-        assertThrows(RuntimeException.class, () -> {
-            parser.parse(message);
-        });
-    }
-
-    @Test
     public void extract_shouldFormatDatesAsExpected() {
 
         // given: a message as expected
-        final String message =
+        StringBuffer message = new StringBuffer(
                 "\n Name, Vorname: NAME  " +
-                        "\nE-Mail: ADDRESS " +
-                        "\nMeine Hauptinteressen sind ....: INTEREST " +
-                        "\nNutzer hat die Datenschutzerkl=C3=A4rung akzeptiert. " +
-                        "\nDatum/Uhrzeit: 1999-09= =2D19 09:19:29 CET \n";
+                "\nE-Mail: ADDRESS " +
+                "\nMeine Hauptinteressen sind ....: INTEREST " +
+                "\nNutzer hat die Datenschutzerkl=C3=A4rung akzeptiert. " +
+                "\nDatum/Uhrzeit: 1999-09= =2D19 09:19:29 CET \n");
         // and: a Command that specifies the "version" option
         CommandTest.aCommand("");
         // and: the parser
@@ -139,12 +103,12 @@ public class ParserTest {
     public void extract_shouldPreserveDatesIfInvalid() {
 
         // given: a message as expected
-        final String message =
+        StringBuffer message = new StringBuffer(
                 "\n Name, Vorname: NAME  " +
-                        "\nE-Mail: ADDRESS " +
-                        "\nMeine Hauptinteressen sind ....: INTEREST " +
-                        "\nNutzer hat die Datenschutzerkl=C3=A4rung akzeptiert. " +
-                        "\nDatum/Uhrzeit: 1999-A 16 GORKY CET \n";
+                "\nE-Mail: ADDRESS " +
+                "\nMeine Hauptinteressen sind ....: INTEREST " +
+                "\nNutzer hat die Datenschutzerkl=C3=A4rung akzeptiert. " +
+                "\nDatum/Uhrzeit: 1999-A 16 GORKY CET \n");
         // and: a Command that specifies the "version" option
         CommandTest.aCommand("");
         // and: the parser

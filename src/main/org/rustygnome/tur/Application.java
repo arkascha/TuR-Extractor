@@ -31,6 +31,10 @@ public class Application
     Application setUp(String[] args) {
         Command.getInstance().setupOptions().processArgs(args);
 
+        if (Command.hasOption("version")) {
+            outputPackageInformation();
+        }
+
         if (Command.hasOption("usage") || Command.hasOption("help")) {
             Command.getInstance().printUsage();
         }
@@ -47,7 +51,7 @@ public class Application
             try {
                 Logger.getInstance().logDebug(TAG, "creating controller");
                 Controller controller = Factored.getFactory(Controller.class).createArtifact();
-                controller.run();
+                controller.control();
             } catch (Exception e) {
                 if (Command.hasOption("action")) {
                     Logger.getInstance().logResult("FAILURE");
@@ -64,5 +68,12 @@ public class Application
             packageTitle = applicationPackage.getImplementationTitle();
             packageVersion = applicationPackage.getImplementationVersion();
         }
+    }
+
+    void outputPackageInformation() {
+        Logger.getInstance().logResult(String.format(
+                "version: %s (%s)",
+                Application.packageTitle,
+                Application.packageVersion));
     }
 }

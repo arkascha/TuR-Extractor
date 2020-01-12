@@ -8,10 +8,7 @@ import org.rustygnome.tur.domain.Values;
 import org.rustygnome.tur.factory.Factored;
 import org.rustygnome.tur.factory.Factory;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -60,64 +57,5 @@ public class ControllerTest {
 
         // and: the returned artifact should be the one created by the mocked factory
         assertEquals(mockedController, controller);
-    }
-
-    @Test
-    public void run_shouldUseAllArtifactsByTheirMainPurpose() {
-
-        // given: a command
-        CommandTest.aCommand("-i -");
-        // and: some input to read
-        final String input = "Postprophylaktische Suboptimalität";
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
-
-        // and: some mocked artifacts
-        Logger mockedLogger = mock(Logger.class);
-        Factored.setInstance(Logger.class, mockedLogger);
-
-        Parser mockedParser = mock(Parser.class);
-        when(mockedParser.parse(anyString())).thenReturn(mock(Values.class));
-        Factored.setInstance(Parser.class, mockedParser);
-
-        Reader mockedReader = mock(Reader.class);
-        when(mockedReader.read(any())).thenReturn("Blocksberg");
-        Factored.setInstance(Reader.class, mockedReader);
-
-        Writer mockedWriter = mock(Writer.class);
-        when(mockedWriter.write(any())).thenReturn(true);
-        Factored.setInstance(Writer.class, mockedWriter);
-
-        // and: a Controller
-        Controller controller = Factored.getFactory(Controller.class).createArtifact();
-
-        // when: running that controller
-        controller.run();
-
-        // then: all artifacts should get used by their main purpose
-        verify(mockedLogger, times(1)).logValues(anyBoolean(), any());
-        verify(mockedParser, times(1)).parse(anyString());
-        verify(mockedReader, times(1)).read(any());
-        verify(mockedWriter, times(1)).write(any());
-    }
-
-    @Test
-    public void cliArgumentVersion_shouldOutputProcessedValues()
-            throws UnsupportedEncodingException {
-
-        // given: a Command that specifies the "version" option
-        CommandTest.aCommand("-v");
-        // and: a captured StdErr output
-        ByteArrayOutputStream stdOut = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(stdOut, true, "UTF-8"));
-
-        // when: a Controller ist instantiated
-        Controller.getInstance();
-
-        // then: the output should contain the package information
-        String expectedInformation = String.format(
-                "version: %s (%s)",
-                Application.packageTitle,
-                Application.packageVersion);
-        assertEquals(expectedInformation, stdOut.toString().trim());
     }
 }

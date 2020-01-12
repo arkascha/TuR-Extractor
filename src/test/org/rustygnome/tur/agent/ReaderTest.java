@@ -62,14 +62,16 @@ public class ReaderTest {
         CommandTest.aCommand("-i -");
         // and: some input to read
         ByteArrayInputStream inputStream = new ByteArrayInputStream(input.getBytes());
+        // and: some output buffer
+        StringBuffer outputBuffer = new StringBuffer();
 
         // and: a Reader reading that input
         Reader reader = Factored.getFactory(Reader.class).createArtifact();
 
         // when: input is read
-        String output = reader.read(inputStream);
+        reader.readInput(inputStream, outputBuffer);
 
         // then: the input should actually get read
-        assertEquals(input, output);
+        assertEquals(input, outputBuffer.toString());
     }
 }

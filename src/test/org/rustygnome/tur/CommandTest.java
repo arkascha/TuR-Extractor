@@ -128,7 +128,7 @@ public class CommandTest {
         System.setOut(new PrintStream(stdOut, true, "UTF-8"));
 
         // when: CLI args with an undefined option "-r"
-        String[] args = new String[]{"-r"};
+        String[] args = new String[]{"-Q"};
         command.processArgs(args);
 
         // then: no input should have been set
